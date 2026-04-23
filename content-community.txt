@@ -1,0 +1,10 @@
+Obra Autodocs
+
+Fast & minimal looking component variant documentation generation, yet packed with features.
+
+* Performance-driven: 🔥 Component documentation generation in seconds. No slow grid generation. Retain ability to actually edit your components.
+* Turn documentation on or off with a simple toggle. Plugin detects existing documentation and offers a way to turn it on or off. Toggle grid lines on and off as well depending on what you are working on.
+* Set custom colors: for those components on darker backgrounds, where the default purple doesn't work.
+* Align to X or Y grid (Beta)
+* Document boolean show/hide properties (Beta)
+

@@ -1,0 +1,24 @@
+{
+  "name": "Obra Autodocs",
+  "id": "1603778616137404487",
+  "api": "1.0.0",
+  "main": "code.js",
+  "ui": "ui.html",
+  "documentAccess": "dynamic-page",
+  "editorType": ["figma"],
+  "networkAccess": {
+    "allowedDomains": ["https://api-cors-anywhere.lemonsqueezy.com"]
+  },
+  "capabilities": [],
+  "permissions": [],
+  "menu": [
+    { "name": "Open plugin", "command": "open" },
+    { "separator": true },
+    { "name": "Generate docs", "command": "generate" },
+    { "name": "Generate with boolean visibility", "command": "generate-boolean" },
+    { "name": "Generate with nested instances", "command": "generate-nested" },
+    { "name": "Generate with both", "command": "generate-both" },
+    { "separator": true },
+    { "name": "Remove docs", "command": "remove" }
+  ]
+}

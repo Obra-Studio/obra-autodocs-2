@@ -1,0 +1,4574 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    :root {
+      --gray-7: #191919;
+      --gray-6: #2C2C2C;
+      --gray-5: #565656;
+      --gray-4: #7F7F7F;
+      --gray-3: #B2B2B2;
+      --gray-2: #DDDDDD;
+      --gray-1: #F0F0F0;
+      --blue-4: #007BE5;
+      --blue-3: #4597F7;
+      --blue-1: #E1F3FF;
+      --red-4: #E05534;
+      --red-1: #FBE9E4;
+      --green-4: #31BCAD;
+      --green-3: #0ED2BD;
+      --yellow-4: #D97706;
+      --yellow-3: #F59E0B;
+      --yellow-1: #FEF3C7;
+
+      --font-family: Inter, Arial, sans-serif;
+      --font-size-body: 11px;
+      --border-radius-small: 2px;
+      --border-radius-med: 5px;
+      --body-line-height: 1.3;
+
+      /* Semantic */
+      --primary-color: var(--blue-4);
+      --field-border-color: var(--gray-3);
+      --focus-ring-color: var(--primary-color);
+      --semantic-text-muted: var(--gray-4);
+      --semantic-text-body: var(--gray-6);
+      --semantic-text-heading: var(--gray-7);
+      --semantic-text-label: var(--gray-7);
+      --semantic-bg: #FFF;
+      --semantic-bg-secondary: var(--gray-1);
+      --semantic-bg-tertiary: var(--gray-2);
+      --semantic-border: var(--gray-2);
+      --semantic-text-success: #43a047;
+      --semantic-text-danger: var(--red-4);
+      --semantic-bg-warning: var(--yellow-1);
+      --semantic-border-warning: var(--yellow-3);
+      --semantic-text-warning: #b45309;
+      --semantic-text-warning-strong: #92400e;
+      --text-input: var(--gray-7);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --primary-color: var(--blue-3);
+        --field-border-color: var(--gray-4);
+        --semantic-text-muted: var(--gray-3);
+        --semantic-text-body: var(--gray-3);
+        --semantic-text-heading: #FFF;
+        --semantic-text-label: #FFF;
+        --semantic-bg: var(--gray-6);
+        --semantic-bg-secondary: var(--gray-5);
+        --semantic-bg-tertiary: var(--gray-4);
+        --semantic-border: var(--gray-5);
+        --semantic-text-success: var(--green-3);
+        --semantic-text-danger: var(--red-4);
+        --semantic-bg-warning: #422006;
+        --semantic-border-warning: var(--yellow-4);
+        --semantic-text-warning: var(--yellow-3);
+        --semantic-text-warning-strong: var(--yellow-3);
+        --text-input: #FFF;
+      }
+      body {
+        color: var(--gray-3);
+        background: var(--gray-7);
+        color-scheme: dark;
+      }
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    input[type="text"],
+    input[type="number"] {
+      color: var(--text-input);
+      background: var(--semantic-bg);
+    }
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      opacity: 1;
+    }
+
+    body {
+      font-family: var(--font-family);
+      font-size: var(--font-size-body);
+      color: var(--semantic-text-body);
+      background: var(--semantic-bg);
+      line-height: var(--body-line-height);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ─── Tab bar ──────────────────────────────────────────── */
+
+    .tab-bar {
+      display: flex;
+      border-bottom: 1px solid var(--semantic-border);
+      flex-shrink: 0;
+    }
+    .tab-bar button {
+      flex: 1;
+      padding: 8px 0;
+      border: none;
+      background: none;
+      font-family: var(--font-family);
+      font-size: var(--font-size-body);
+      font-weight: 500;
+      color: var(--semantic-text-muted);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .tab-bar button:hover {
+      color: var(--semantic-text-heading);
+    }
+    .tab-bar button.active {
+      color: var(--primary-color);
+      border-bottom-color: var(--primary-color);
+    }
+    .tab-bar button:focus { outline: 0; }
+    .tab-bar button[data-tab="settings"] {
+      flex: none;
+      padding: 8px 8px;
+    }
+
+    .tab-bar button[data-tab="migrate"] {
+      flex: none;
+      padding: 8px 8px;
+    }
+
+    /* Migrate success alert */
+    .migrate-success {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 6px;
+      background: #E8F5E9;
+      color: #2E7D32;
+      border: 1px solid #A5D6A7;
+    }
+    .migrate-success svg { width: 16px; height: 16px; flex-shrink: 0; }
+    @media (prefers-color-scheme: dark) {
+      .migrate-success {
+        background: #1B3A1F;
+        color: #66BB6A;
+        border-color: #2E7D32;
+      }
+    }
+
+    /* Migrate tab buttons */
+    #tab-migrate button {
+      padding: 5px 10px;
+      border: 1px solid var(--field-border-color);
+      border-radius: 5px;
+      font-family: var(--font-family);
+      font-size: var(--font-size-small);
+      font-weight: 500;
+      line-height: 1.4;
+      cursor: pointer;
+      background: var(--semantic-bg-primary);
+      color: var(--semantic-text-body);
+    }
+    #tab-migrate button:hover {
+      background: var(--semantic-bg-secondary);
+    }
+    .tab-bar button[data-tab="debug"] {
+      flex: none;
+      padding: 8px 8px;
+    }
+
+    /* Debug tab buttons */
+    #tab-debug button {
+      padding: 3px 8px;
+      border: 1px solid var(--field-border-color);
+      border-radius: 4px;
+      font-family: var(--font-family);
+      font-size: 10px;
+      font-weight: 400;
+      line-height: 1.4;
+      cursor: pointer;
+      background: none;
+      color: var(--semantic-text-muted);
+    }
+    #tab-debug button:hover {
+      background: var(--semantic-bg-secondary);
+      color: var(--semantic-text-body);
+    }
+    #tab-debug button.danger {
+      color: var(--semantic-text-danger);
+      border-color: var(--semantic-text-danger);
+    }
+    #tab-debug button.danger:hover {
+      background: var(--semantic-text-danger);
+      color: #fff;
+    }
+
+    .tab-panel {
+      flex: 1;
+      overflow-y: auto;
+      display: none;
+    }
+    .tab-panel.active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ─── Autodocs tab ─────────────────────────────────────── */
+
+    #tab-autodocs {
+      padding: 0;
+      gap: 0;
+    }
+
+    .autodocs-scroll-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      padding: 12px 0;
+    }
+
+    .autodocs-actions {
+      display: flex;
+      padding: 10px 12px;
+      flex-shrink: 0;
+      border-top: 1px solid var(--field-border-color);
+      gap: 6px;
+      position: relative;
+    }
+    .autodocs-actions button.secondary {
+      flex: 0 0 auto;
+    }
+    .autodocs-actions button.primary {
+      flex: 1;
+    }
+    .more-btn {
+      width: 32px;
+      min-width: 32px;
+      flex: 0 0 32px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--semantic-bg);
+      border: 1px solid var(--field-border-color);
+      border-radius: var(--border-radius-med);
+      cursor: pointer;
+      color: var(--semantic-text-body);
+    }
+    .more-btn:hover {
+      background: var(--semantic-bg-secondary);
+    }
+    .more-btn svg {
+      width: 16px;
+      height: 16px;
+    }
+    .more-menu {
+      display: none;
+      position: absolute;
+      bottom: 100%;
+      right: 12px;
+      margin-bottom: 4px;
+      background: var(--semantic-bg);
+      border: 1px solid var(--field-border-color);
+      border-radius: var(--border-radius-med);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      min-width: 220px;
+      z-index: 100;
+      padding: 4px 0;
+    }
+    .more-menu.open {
+      display: block;
+    }
+    .more-menu-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      font-size: var(--font-size-small);
+      color: var(--semantic-text-body);
+      cursor: pointer;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+    }
+    .more-menu-item:hover {
+      background: var(--semantic-bg-secondary);
+    }
+    .more-menu-item svg {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+    }
+    .more-menu-divider {
+      height: 1px;
+      background: var(--field-border-color);
+      margin: 4px 0;
+    }
+    .more-menu-section {
+      padding: 4px 12px;
+      font-size: 10px;
+      color: var(--semantic-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Status banner */
+    .status-banner {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: var(--border-radius-med);
+      font-size: var(--font-size-body);
+      font-weight: 400;
+      line-height: 1.5;
+      margin: 0 12px;
+    }
+    .status-banner svg { width: 16px; height: 16px; flex-shrink: 0; }
+    .status-banner.success {
+      background: #E8F5E9;
+      color: #2E7D32;
+      border: 1px solid #A5D6A7;
+    }
+    .status-banner.existing {
+      background: var(--semantic-bg-warning);
+      color: var(--semantic-text-warning);
+      border: 1px solid var(--semantic-border-warning);
+    }
+    @media (prefers-color-scheme: dark) {
+      .status-banner.success {
+        background: #1B3A1F;
+        color: #66BB6A;
+        border-color: #2E7D32;
+      }
+    }
+
+    /* Info icon + tooltip */
+    .info-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .info-icon {
+      width: 14px;
+      height: 14px;
+      color: var(--semantic-text-muted);
+      cursor: help;
+    }
+    .info-tooltip {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 100%;
+      margin-top: 6px;
+      width: 200px;
+      padding: 8px;
+      background: #000;
+      border: 1px solid var(--semantic-border);
+      border-radius: var(--border-radius-med);
+      font-size: var(--font-size-body);
+      font-weight: 400;
+      color: #FFF;
+      line-height: 1.5;
+      z-index: 10;
+    }
+    @media (prefers-color-scheme: dark) {
+      .info-tooltip {
+        background: #C8C8C8;
+        color: #000;
+      }
+    }
+    .info-wrap:hover .info-tooltip { display: block; }
+
+    /* Option row with info icon */
+    .option-with-info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* Sections */
+    .section {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .section-title {
+      font-size: var(--font-size-body);
+      font-weight: 500;
+      color: var(--semantic-text-heading);
+    }
+
+    /* Autodocs tab: inner padding per section */
+    #tab-autodocs .section { padding: 12px; }
+    #tab-autodocs #gusSection { padding: 8px 12px 0; }
+    #tab-autodocs .grid-warning { margin: 0 12px; }
+    #tab-autodocs .grid-info { margin-top: 8px; }
+    #tab-autodocs #autodocs-status { padding: 0 12px; }
+
+    /* Options */
+    .options { display: flex; flex-direction: column; gap: 6px; }
+    .option {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--semantic-text-label);
+    }
+
+    /* Custom checkboxes */
+    input[type="checkbox"] {
+      margin: 0;
+      padding: 0;
+      -webkit-appearance: none;
+      appearance: none;
+      flex-shrink: 0;
+    }
+    input[type="checkbox"]:before {
+      content: " ";
+      width: 11px;
+      height: 11px;
+      display: block;
+      border-radius: var(--border-radius-small);
+      transition: 120ms transform ease-in-out;
+      box-shadow: 0 0 0 1px var(--field-border-color);
+    }
+    input[type="checkbox"]:checked:before {
+      background: var(--primary-color) url("data:image/svg+xml,%0A%3Csvg width='8' height='8' viewBox='0 0 8 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M1.17647 2.82377L3.05882 4.70613L6.82353 0.941406L8 2.11788L3.05882 7.05908L0 4.00024L1.17647 2.82377Z' fill='white'/%3E%3C/svg%3E") no-repeat center center;
+      box-shadow: 0 0 0 1px var(--primary-color);
+    }
+    input[type="checkbox"]:disabled {
+      opacity: .35;
+    }
+    label.option:has(input[type="checkbox"]:disabled) {
+      opacity: .35;
+    }
+    label.option:has(input[type="checkbox"]:disabled) input[type="checkbox"] {
+      opacity: 1;
+    }
+    input[type="checkbox"]:focus { outline: 0; }
+    input[type="checkbox"]:focus-visible {
+      box-shadow: 0 0 0 1px var(--focus-ring-color), 0 0 0 3px rgba(0,123,229,0.3);
+    }
+
+    /* Custom radio buttons */
+    input[type="radio"] {
+      margin: 0;
+      padding: 0;
+      -webkit-appearance: none;
+      appearance: none;
+      flex-shrink: 0;
+    }
+    input[type="radio"]:before {
+      content: " ";
+      width: 11px;
+      height: 11px;
+      display: block;
+      border-radius: 50%;
+      box-shadow: 0 0 0 1px var(--field-border-color);
+    }
+    input[type="radio"]:checked:before {
+      background: var(--primary-color);
+      box-shadow: 0 0 0 1px var(--primary-color), inset 0 0 0 2px white;
+    }
+    input[type="radio"]:disabled { opacity: .35; }
+    label.option:has(input[type="radio"]:disabled) { opacity: .35; }
+    label.option:has(input[type="radio"]:disabled) input[type="radio"] { opacity: 1; }
+    label.doc-mode-option:has(input[type="radio"]:disabled) { display: none; }
+    input[type="radio"]:focus { outline: 0; }
+    input[type="radio"]:focus-visible {
+      box-shadow: 0 0 0 1px var(--focus-ring-color), 0 0 0 3px rgba(0,123,229,0.3);
+    }
+
+    /* Doc mode badge */
+    .doc-mode-badge {
+      font-size: var(--font-size-xsmall, 10px);
+      background: var(--primary-color);
+      color: white;
+      padding: 1px 5px;
+      border-radius: 3px;
+      margin-left: 4px;
+      white-space: nowrap;
+    }
+    .doc-mode-radios {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    /* Color picker */
+    input[type="color"] {
+      width: 20px;
+      height: 20px;
+      border: 1px solid var(--field-border-color);
+      padding: 1px;
+      cursor: pointer;
+      border-radius: var(--border-radius-small);
+      background: var(--semantic-bg);
+    }
+
+    /* Color swatches */
+    .color-swatches {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .color-swatch {
+      width: 20px;
+      height: 20px;
+      border-radius: var(--border-radius-small);
+      border: 1.5px solid var(--field-border-color);
+      cursor: pointer;
+      flex-shrink: 0;
+      box-sizing: border-box;
+    }
+    .color-swatch:hover { opacity: 0.8; }
+    .color-swatch.active {
+      border-color: var(--semantic-text-heading);
+      box-shadow: inset 0 0 0 1.5px var(--semantic-bg);
+    }
+    .swatch-info {
+      display: flex;
+      align-items: center;
+      color: var(--semantic-text-muted);
+      cursor: help;
+    }
+    .swatch-info:hover { color: var(--semantic-text-body); }
+
+    /* Settings color dot */
+    .settings-color-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 2px;
+      border: 1px solid var(--field-border-color);
+      flex-shrink: 0;
+    }
+
+    /* Select */
+    select {
+      font-family: var(--font-family);
+      font-size: var(--font-size-body);
+      padding: 2px 4px;
+      border: 1px solid var(--field-border-color);
+      border-radius: 3px;
+      background: var(--semantic-bg);
+      color: var(--text-input);
+    }
+    select[size] {
+      width: 100%;
+    }
+    select:focus { outline: 0; }
+    select:focus-visible {
+      border-color: var(--focus-ring-color);
+      box-shadow: 0 0 0 1px var(--focus-ring-color);
+    }
+
+    /* Documentation color label */
+    .color-label {
+      font-size: var(--font-size-body);
+      color: var(--semantic-text-label);
+      font-weight: 500;
+    }
+
+    /* Autodocs buttons */
+    #tab-autodocs button {
+      padding: 6px 12px;
+      border: none;
+      border-radius: var(--border-radius-med);
+      font-family: var(--font-family);
+      font-size: var(--font-size-body);
+      font-weight: 500;
+      line-height: var(--body-line-height);
+      cursor: pointer;
+      -webkit-font-smoothing: antialiased;
+    }
+    #tab-autodocs button:focus { outline: 0; }
+    #tab-autodocs button:focus-visible {
+      box-shadow: 0 0 0 1px var(--focus-ring-color), 0 0 0 3px rgba(0,123,229,0.3);
+    }
+
+    button.primary {
+      background: var(--primary-color);
+      color: #FFF;
+      border: 1px solid var(--primary-color);
+    }
+    button.primary:hover {
+      filter: brightness(1.1);
+    }
+
+    button.secondary {
+      background: rgba(128, 128, 128, 0.1);
+      color: var(--semantic-text-body);
+      border: 1px solid var(--field-border-color);
+    }
+    button.secondary:hover {
+      background: var(--semantic-bg-secondary);
+    }
+
+    button.muted {
+      background: var(--semantic-bg-secondary);
+      color: var(--semantic-text-muted);
+      border: none;
+      font-weight: 400;
+      font-size: 10px;
+    }
+    button.muted:hover {
+      opacity: .7;
+    }
+
+    button[disabled] {
+      opacity: .3;
+      cursor: not-allowed;
+    }
+
+    button.warning {
+      background: var(--semantic-border-warning);
+      color: #FFF;
+      border: none;
+    }
+    button.warning:hover {
+      filter: brightness(0.9);
+    }
+
+    /* Divider */
+    #tab-autodocs .divider {
+      height: 1px;
+      background: var(--semantic-border);
+    }
+
+    /* Status */
+    #autodocs-status {
+      font-size: var(--font-size-body);
+      color: var(--semantic-text-muted);
+      min-height: 16px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    #autodocs-status.error { color: var(--semantic-text-danger); }
+    #autodocs-status.success { color: var(--semantic-text-success); }
+    .spinner {
+      width: 12px; height: 12px;
+      border: 2px solid var(--semantic-border);
+      border-top-color: var(--semantic-text-muted);
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Grid warning */
+    .grid-warning {
+      font-size: var(--font-size-body);
+      color: var(--semantic-text-warning);
+      padding: 8px;
+      background: var(--semantic-bg-warning);
+      border: 1px solid var(--semantic-border-warning);
+      border-radius: var(--border-radius-med);
+      line-height: 1.5;
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+    }
+    .grid-warning svg { width: 14px; height: 14px; flex-shrink: 0; margin-top: 1px; }
+    .grid-warning strong { color: var(--semantic-text-warning-strong); }
+
+    .grid-info {
+      font-size: var(--font-size-body);
+      color: var(--blue-4);
+      padding: 8px;
+      background: var(--blue-1);
+      border: 1px solid var(--blue-3);
+      border-radius: var(--border-radius-med);
+      line-height: 1.5;
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      margin: 0 12px;
+    }
+    .grid-info svg { width: 14px; height: 14px; flex-shrink: 0; margin-top: 1px; }
+    @media (prefers-color-scheme: dark) {
+      .grid-info { color: var(--blue-3); background: rgba(69,151,247,0.1); border-color: rgba(69,151,247,0.3); }
+    }
+
+    /* Propstar warning */
+    .gus-warning {
+      font-size: var(--font-size-body);
+      color: var(--semantic-text-warning);
+      padding: 8px;
+      background: var(--semantic-bg-warning);
+      border: 1px solid var(--semantic-border-warning);
+      border-radius: var(--border-radius-med);
+      line-height: 1.5;
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+    }
+    .gus-warning svg { width: 14px; height: 14px; flex-shrink: 0; margin-top: 1px; }
+    .gus-warning strong { color: var(--semantic-text-warning-strong); }
+
+    /* Reset link */
+    .reset-link {
+      font-size: 10px;
+      color: var(--primary-color);
+      cursor: pointer;
+      margin-left: 4px;
+      text-decoration: underline;
+    }
+
+    /* Boolean combination sub-option */
+    .sub-option {
+      margin-left: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .sub-option-heading {
+      font-size: var(--font-size-small);
+      font-weight: 500;
+      margin-top: 4px;
+    }
+    .boolean-display-radios {
+      display: flex;
+      gap: 12px;
+    }
+    .segmented-control {
+      display: inline-flex;
+      border: 1px solid var(--semantic-border);
+      border-radius: var(--border-radius-med);
+      overflow: hidden;
+    }
+    .segmented-control button {
+      padding: 4px 12px;
+      border: none;
+      background: var(--semantic-bg);
+      font-family: var(--font-family);
+      font-size: var(--font-size-small);
+      color: var(--semantic-text-muted);
+      cursor: pointer;
+      border-radius: 0;
+      transition: background 0.15s, color 0.15s;
+    }
+    .segmented-control button:not(:last-child) {
+      border-right: 1px solid var(--semantic-border);
+    }
+    .segmented-control button.active {
+      background: var(--semantic-bg-tertiary);
+      color: var(--semantic-text-heading);
+      font-weight: 500;
+    }
+    .segmented-control button:hover:not(.active) {
+      background: var(--semantic-bg-hover);
+    }
+    .prop-checklist {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .prop-checklist label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: var(--font-size-body);
+      cursor: pointer;
+    }
+    .scope-values-list {
+      padding-left: 20px;
+      margin-top: 2px;
+    }
+
+    /* Filter builder for variant combinations */
+    .filter-builder {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      margin-bottom: 4px;
+    }
+    .filter-prop-row {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .filter-prop-label {
+      font-size: var(--font-size-small);
+      color: var(--semantic-text-muted);
+      min-width: 60px;
+      flex-shrink: 0;
+    }
+    .filter-prop-select {
+      flex: 1;
+      min-width: 0;
+    }
+    .filter-add-row {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .filter-add-row .filter-prop-label {
+      visibility: hidden;
+    }
+    .filter-add-btn {
+      flex: 1;
+      min-width: 0;
+      padding: 4px 12px;
+      border: 1px solid var(--field-border-color);
+      border-radius: var(--border-radius-med);
+      background: rgba(128, 128, 128, 0.1);
+      color: var(--semantic-text-body);
+      font-family: var(--font-family);
+      font-size: var(--font-size-body);
+      font-weight: 500;
+      cursor: pointer;
+      -webkit-font-smoothing: antialiased;
+    }
+    .filter-add-btn:hover {
+      background: var(--semantic-bg-hover);
+    }
+    .filter-entries {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .filter-entry {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      font-size: var(--font-size-small);
+      padding: 1px 6px;
+      background: var(--semantic-bg-secondary);
+      border: 1px solid var(--field-border-color);
+      border-radius: var(--border-radius-med);
+    }
+    .filter-entry-remove {
+      flex-shrink: 0;
+      width: 18px !important;
+      height: 18px;
+      min-width: 18px;
+      max-width: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--semantic-text-muted);
+      font-size: 12px;
+      line-height: 1;
+      border: none;
+      border-radius: 50%;
+      background: none;
+      padding: 0 !important;
+    }
+    .filter-entry-remove:hover {
+      background: var(--semantic-bg-hover);
+      color: var(--semantic-text-body);
+    }
+    .filter-entry-name {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .filter-placeholder {
+      font-size: var(--font-size-small);
+      color: var(--semantic-text-muted);
+      font-style: italic;
+    }
+    .filter-remove-all {
+      align-self: flex-end;
+      width: auto !important;
+      padding: 1px 8px !important;
+      font-size: var(--font-size-small);
+      font-weight: 400;
+      color: var(--semantic-text-muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+    .filter-remove-all:hover {
+      color: var(--semantic-text-body);
+    }
+
+    /* ─── Navigate tab ─────────────────────────────────────── */
+
+    #tab-navigate {
+      padding: 16px;
+    }
+    #tab-navigate .section-title {
+      font-size: 10px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--semantic-text-muted);
+      margin-bottom: 8px;
+    }
+    .nav-tools-content {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .dpad-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    .dpad {
+      display: grid;
+      grid-template-columns: 28px 28px 28px;
+      grid-template-rows: 28px 28px 28px;
+      gap: 2px;
+    }
+    .dpad-btn {
+      width: 28px;
+      height: 28px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      color: var(--semantic-text-body);
+      background: rgba(128, 128, 128, 0.1);
+      border: 1px solid var(--semantic-border);
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .dpad-btn:hover {
+      background: var(--semantic-bg-secondary);
+    }
+    .dpad-up { grid-column: 2; grid-row: 1; }
+    .dpad-left { grid-column: 1; grid-row: 2; }
+    .dpad-center { grid-column: 2; grid-row: 2; background: var(--semantic-bg-tertiary); border-radius: 4px; border: none; cursor: default; }
+    .dpad-right { grid-column: 3; grid-row: 2; }
+    .dpad-down { grid-column: 2; grid-row: 3; }
+    .dpad-label {
+      font-size: 9px;
+      color: var(--semantic-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .expand-controls {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .nav-group-label {
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--semantic-text-muted);
+      display: block;
+      margin-bottom: 4px;
+    }
+    .nav-selection-buttons {
+      display: flex;
+      gap: 4px;
+    }
+    .nav-selection-buttons button {
+      flex: 1;
+      height: 26px;
+      padding: 0 8px;
+      border: 1px solid var(--semantic-border);
+      border-radius: 4px;
+      background: rgba(128, 128, 128, 0.1);
+      font-family: var(--font-family);
+      font-size: var(--font-size-body);
+      font-weight: 500;
+      color: var(--semantic-text-body);
+      cursor: pointer;
+    }
+    .nav-selection-buttons button:hover {
+      background: var(--semantic-bg-secondary);
+    }
+    #tab-navigate .nav-description {
+      font-size: 11px;
+      color: var(--semantic-text-muted);
+      line-height: 1.5;
+      margin-bottom: 8px;
+    }
+    .nav-focus-btn {
+      width: 100%;
+      height: 28px;
+      margin-bottom: 12px;
+      padding: 0 10px;
+      border: 1px solid var(--semantic-border);
+      border-radius: 4px;
+      background: rgba(128, 128, 128, 0.1);
+      font-family: var(--font-family);
+      font-size: var(--font-size-body);
+      font-weight: 500;
+      color: var(--semantic-text-body);
+      cursor: pointer;
+    }
+    .nav-focus-btn:hover {
+      background: var(--semantic-bg-secondary);
+    }
+    .nav-divider {
+      border: none;
+      border-top: 1px solid var(--semantic-border);
+      margin: 16px 0;
+    }
+    .deep-variant-section {
+      margin-top: 0;
+    }
+    .deep-variant-empty {
+      font-size: 11px;
+      color: var(--semantic-text-muted);
+      padding: 8px 0;
+    }
+    .deep-variant-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .deep-variant-label {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--semantic-text-body);
+      min-width: 72px;
+      flex-shrink: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .deep-variant-buttons {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+    .deep-variant-buttons button {
+      height: 24px;
+      padding: 0 8px;
+      border-radius: 4px;
+      font-family: var(--font-family);
+      font-size: 10px;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .deep-variant-buttons .dv-add {
+      background: rgba(49, 188, 173, 0.1);
+      border: 1px solid var(--green-4);
+      color: var(--green-4);
+    }
+    .deep-variant-buttons .dv-add:hover {
+      background: var(--green-4);
+      color: #fff;
+    }
+    .deep-variant-buttons .dv-remove {
+      background: rgba(224, 85, 52, 0.1);
+      border: 1px solid var(--red-4);
+      color: var(--red-4);
+    }
+    .deep-variant-buttons .dv-remove:hover {
+      background: var(--red-4);
+      color: #fff;
+    }
+
+    /* ─── Settings tab ────────────────────────────────────── */
+
+    #tab-settings {
+      padding: 12px;
+      gap: 16px;
+    }
+    .settings-desc {
+      font-size: 11px;
+      color: var(--semantic-text-muted);
+      line-height: 1.5;
+    }
+    .settings-chip-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    .settings-chip {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      padding: 2px 4px 2px 8px;
+      border: 1px solid var(--field-border-color);
+      border-radius: 4px;
+      font-size: 11px;
+      background: var(--semantic-bg);
+      color: var(--semantic-text-body);
+      cursor: default;
+      outline: none;
+    }
+    .settings-chip:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 1px var(--primary-color);
+    }
+    .settings-chip .remove-chip {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      width: 16px;
+      height: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.35;
+      color: var(--semantic-text-body);
+      font-size: 14px;
+      line-height: 1;
+    }
+    .settings-chip .remove-chip:hover { opacity: 0.8; }
+    .settings-add-row {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      margin-top: 4px;
+    }
+    .settings-add-row input {
+      width: 72px;
+      height: 26px;
+      border: 1px solid var(--field-border-color);
+      border-radius: 4px;
+      padding: 0 6px;
+      font-size: 12px;
+      font-family: inherit;
+      background: var(--semantic-bg);
+      color: var(--text-input);
+    }
+    .settings-add-row input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+    }
+    .settings-add-row button {
+      height: 26px;
+      padding: 0 10px;
+      border: 1px solid var(--field-border-color);
+      border-radius: 4px;
+      background: rgba(128, 128, 128, 0.1);
+      font-family: var(--font-family);
+      font-size: var(--font-size-body);
+      font-weight: 500;
+      color: var(--semantic-text-body);
+      cursor: pointer;
+    }
+    .settings-add-row button:hover { background: var(--semantic-bg-secondary); }
+
+    /* ─── Groupify tab ─────────────────────────────────────── */
+
+    #tab-org {
+      font-size: 12px;
+    }
+
+    .groupify-scroll-area {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+    }
+
+    /* Preferred axis control */
+    .preferred-axis-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    /* Paddings section */
+    .groupify-section-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--semantic-text-heading);
+    }
+    .paddings-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .padding-field {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .padding-field svg { width: 16px; height: 16px; flex-shrink: 0; color: var(--semantic-text-muted); }
+    .padding-field svg rect { stroke: var(--field-border-color); }
+    .padding-field svg line { stroke: var(--semantic-text-heading); stroke-width: 2; }
+    .padding-field input {
+      width: 32px;
+      height: 18px;
+      border: none;
+      border-bottom: 1px solid var(--semantic-border);
+      border-radius: 0;
+      padding: 0;
+      font-size: 11px;
+      font-family: inherit;
+      text-align: center;
+      background: transparent;
+      color: var(--semantic-text-body);
+    }
+    .padding-field input:focus {
+      outline: none;
+      border-bottom-color: var(--primary-color);
+    }
+
+    /* Preset button groups (shared segmented style) */
+    .padding-presets,
+    .spacing-presets {
+      display: inline-flex;
+      border: 1px solid var(--field-border-color);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .padding-presets {
+      margin-top: 8px;
+    }
+    .preset-btn {
+      flex: none;
+      height: 20px;
+      min-width: 28px;
+      padding: 0 5px;
+      border: none;
+      border-right: 1px solid var(--field-border-color);
+      border-radius: 0;
+      background: var(--semantic-bg);
+      font-size: 11px;
+      font-family: inherit;
+      color: var(--semantic-text-body);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .preset-btn:last-child { border-right: none; }
+    .preset-btn:hover { background: var(--semantic-bg-secondary); }
+    .preset-btn.active { background: var(--semantic-bg-tertiary); color: var(--semantic-text-heading); }
+
+    /* Segmented control */
+    .seg-control {
+      display: flex;
+      border: 1px solid var(--field-border-color);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .seg-btn {
+      padding: 3px 8px;
+      font-size: 11px;
+      font-family: inherit;
+      border: none;
+      background: var(--semantic-bg);
+      color: var(--semantic-text-muted);
+      cursor: pointer;
+      line-height: 1.3;
+    }
+    .seg-btn:not(:last-child) {
+      border-right: 1px solid var(--field-border-color);
+    }
+    .seg-btn:hover { background: var(--semantic-bg-secondary); }
+    .seg-btn.active {
+      background: var(--semantic-bg-tertiary);
+      color: var(--semantic-text-heading);
+    }
+
+    /* Padding section */
+    .paddings-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .lock-btn {
+      width: 24px;
+      height: 24px;
+      border: 1px solid var(--field-border-color);
+      border-radius: 4px;
+      background: var(--semantic-bg);
+      color: var(--semantic-text-body);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      flex: none;
+    }
+    .lock-btn:hover { background: var(--semantic-bg-secondary); }
+    .lock-btn.active { background: var(--semantic-bg-tertiary); border-color: var(--field-border-color); }
+    .lock-btn svg { width: 14px; height: 14px; }
+
+    /* Groupify divider */
+    #tab-org .g-divider {
+      border: none;
+      border-top: 1px solid var(--semantic-border);
+      margin: 16px 0;
+    }
+
+    /* Section controls */
+    #groupify-section-controls {
+      display: none;
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2px;
+    }
+    .section-dir-row {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Property sections */
+    .property-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .property-name {
+      font-size: 12px;
+      font-weight: 500;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: var(--semantic-text-heading);
+    }
+    .property-controls {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+
+    .dir-btn {
+      width: 24px;
+      height: 24px;
+      border: 1px solid var(--field-border-color);
+      border-radius: 4px;
+      background: var(--semantic-bg);
+      color: var(--semantic-text-body);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+    .dir-btn:hover { background: var(--semantic-bg-secondary); }
+    .dir-btn.active { background: var(--semantic-bg-tertiary); border-color: var(--field-border-color); }
+    .dir-btn svg { width: 16px; height: 16px; }
+
+    /* Tooltips */
+    [data-tooltip] {
+      position: relative;
+    }
+    [data-tooltip]::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #000;
+      color: #FFF;
+      font-size: 10px;
+      font-weight: 400;
+      line-height: 1;
+      padding: 5px 8px;
+      border-radius: 4px;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.15s;
+      z-index: 100;
+    }
+    @media (prefers-color-scheme: dark) {
+      [data-tooltip]::after {
+        background: #C8C8C8;
+        color: #000;
+      }
+    }
+    [data-tooltip]:hover::after {
+      opacity: 1;
+    }
+
+    .spacing-presets {
+      margin: 4px 0 2px 26px;
+    }
+    .preset-btn.custom-active input {
+      width: 28px;
+      height: 100%;
+      border: none;
+      padding: 0;
+      font-size: 11px;
+      font-family: inherit;
+      text-align: center;
+      background: transparent;
+      color: inherit;
+      outline: none;
+    }
+
+    /* Value list (drag-reorderable) */
+    .value-list { list-style: none; }
+    .value-item {
+      padding: 5px 10px;
+      margin-left: 4px;
+      cursor: grab;
+      user-select: none;
+      font-size: 12px;
+      border-radius: 4px;
+      transition: background 0.1s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--semantic-text-body);
+    }
+    .value-item:hover { background: var(--semantic-bg-secondary); }
+    .value-item.dragging { opacity: 0.4; }
+    .value-item.drag-over-top { box-shadow: inset 0 2px 0 0 var(--primary-color); }
+    .value-item.drag-over-bottom { box-shadow: inset 0 -2px 0 0 var(--primary-color); }
+    .drag-handle {
+      flex-shrink: 0;
+      opacity: 0.35;
+    }
+
+    /* Property drag reorder */
+    .property-section {
+      transition: background 0.1s;
+    }
+    .property-reorder-arrows {
+      display: flex;
+      flex-shrink: 0;
+      margin-right: 4px;
+      gap: 2px;
+    }
+    .property-reorder-arrows button {
+      background: var(--semantic-bg);
+      border: 1px solid var(--field-border-color);
+      border-radius: 4px;
+      padding: 0;
+      margin: 0;
+      cursor: pointer;
+      color: var(--semantic-text-body);
+      line-height: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+    }
+    .property-reorder-arrows button:hover { background: var(--semantic-bg-secondary); }
+    .property-reorder-arrows button:disabled { opacity: 0.25; cursor: default; background: var(--semantic-bg); }
+
+    /* Groupify status */
+    #groupify-apply {
+      width: calc(100% - 24px);
+      margin: 8px 12px 0;
+      padding: 6px 12px;
+      border-radius: var(--border-radius-med);
+      font-family: var(--font-family);
+      font-size: var(--font-size-body);
+      font-weight: 500;
+      line-height: var(--body-line-height);
+      cursor: pointer;
+      -webkit-font-smoothing: antialiased;
+    }
+    #groupify-apply:disabled {
+      opacity: 0.4;
+      cursor: default;
+    }
+
+    .groupify-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      flex-shrink: 0;
+      border-top: 1px solid var(--field-border-color);
+    }
+    .groupify-actions #groupify-apply {
+      margin: 0;
+      width: auto;
+      flex: 1;
+    }
+    #groupify-quick-align {
+      margin: 0;
+      padding: 6px 10px;
+      border-radius: var(--border-radius-med);
+      font-family: var(--font-family);
+      font-size: var(--font-size-body);
+      font-weight: 500;
+      line-height: var(--body-line-height);
+      cursor: pointer;
+      background: var(--semantic-bg-secondary);
+      color: var(--semantic-text-body);
+      border: 1px solid var(--semantic-border);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    #groupify-quick-align:hover { background: var(--semantic-bg-hover); }
+    #groupify-quick-align:disabled { opacity: 0.4; cursor: default; }
+    .groupify-actions-divider {
+      width: 1px;
+      height: 20px;
+      background: var(--field-border-color);
+      flex-shrink: 0;
+    }
+    .auto-apply-label {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      color: var(--semantic-text-muted);
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .auto-apply-label input {
+      margin: 0;
+    }
+
+    #groupify-status {
+      padding: 8px 16px;
+      font-size: 11px;
+      line-height: 1.5;
+      display: none;
+      flex-shrink: 0;
+    }
+    #groupify-status.error { background: var(--semantic-bg-warning); color: var(--semantic-text-danger); display: block; }
+    #groupify-status.success { background: var(--semantic-bg); color: var(--semantic-text-success); display: block; }
+
+    /* Reorder notice */
+    .reorder-notice {
+      background: var(--semantic-bg-warning);
+      color: var(--semantic-text-warning);
+      font-size: 11px;
+      line-height: 1.4;
+      padding: 8px 12px;
+      border-radius: 0;
+      display: none;
+      align-items: flex-start;
+      gap: 6px;
+      flex-shrink: 0;
+      border-top: 1px solid var(--semantic-border-warning);
+    }
+    .reorder-notice .reorder-info-wrap {
+      position: relative;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .reorder-notice .reorder-info-icon {
+      width: 12px;
+      height: 12px;
+      color: var(--semantic-text-warning);
+      cursor: help;
+      opacity: 0.7;
+    }
+    .reorder-notice .reorder-info-icon:hover { opacity: 1; }
+    .reorder-notice .reorder-info-tooltip {
+      display: none;
+      position: absolute;
+      right: 0;
+      bottom: 100%;
+      margin-bottom: 6px;
+      width: 220px;
+      padding: 8px;
+      background: #000;
+      border: 1px solid var(--semantic-border);
+      border-radius: var(--border-radius-med);
+      font-size: var(--font-size-body);
+      font-weight: 400;
+      color: #FFF;
+      line-height: 1.5;
+      z-index: 10;
+    }
+    @media (prefers-color-scheme: dark) {
+      .reorder-notice .reorder-info-tooltip {
+        background: #C8C8C8;
+        color: #000;
+      }
+    }
+    .reorder-notice .reorder-info-wrap:hover .reorder-info-tooltip { display: block; }
+
+    /* Empty state */
+    .autodocs-empty-state {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: var(--semantic-text-muted);
+      padding: 40px 20px;
+      line-height: 1.6;
+      min-height: 240px;
+    }
+    .groupify-empty-state {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: var(--semantic-text-muted);
+      padding: 40px 20px;
+      line-height: 1.6;
+    }
+    #groupify-content { display: none; flex-direction: column; flex: 1; overflow: hidden; }
+  </style>
+</head>
+<body>
+
+  <!-- Tab bar -->
+  <div id="main-tab-bar" class="tab-bar">
+    <button class="active" data-tab="autodocs">Generate docs</button>
+    <button data-tab="org">Organize</button>
+    <button data-tab="navigate">Navigate</button>
+    <button data-tab="migrate"><svg width="14" height="14" viewBox="0 0 20 20" fill="none" style="vertical-align:middle;"><path d="M15.8333 5.83337H4.16663" stroke="currentColor" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M15.8333 14.1666H4.16663" stroke="currentColor" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M12.5 2.5L15.8333 5.83333L12.5 9.16667" stroke="currentColor" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.49996 17.5L4.16663 14.1667L7.49996 10.8334" stroke="currentColor" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <button data-tab="settings"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" style="vertical-align:middle;"><path d="M6.85805 2.75986C7.14605 1.55929 8.85398 1.55929 9.14205 2.75986C9.32825 3.53585 10.2175 3.90419 10.8978 3.48713C11.9504 2.84189 13.1582 4.04957 12.5129 5.10219C12.0958 5.78253 12.4642 6.67178 13.2402 6.85798C14.4407 7.14605 14.4407 8.85398 13.2402 9.14198C12.4642 9.32818 12.0958 10.2174 12.5129 10.8978C13.1582 11.9504 11.9504 13.1581 10.8978 12.5128C10.2175 12.0958 9.32825 12.4641 9.14205 13.2401C8.85398 14.4407 7.14605 14.4407 6.85805 13.2401C6.67185 12.4641 5.7826 12.0958 5.10224 12.5128C4.04964 13.1581 2.84194 11.9504 3.4872 10.8978C3.90425 10.2174 3.5359 9.32818 2.75992 9.14198C1.55936 8.85398 1.55936 7.14605 2.75992 6.85798C3.5359 6.67178 3.90425 5.78254 3.4872 5.10219C2.84194 4.04957 4.04964 2.84189 5.10224 3.48713C5.7826 3.90419 6.67185 3.53585 6.85805 2.75986Z" stroke="currentColor"/><path d="M10 8C10 8.5304 9.78927 9.03913 9.4142 9.4142C9.03913 9.78927 8.5304 10 8 10C7.4696 10 6.96087 9.78927 6.58579 9.4142C6.21071 9.03913 6 8.5304 6 8C6 7.4696 6.21071 6.96087 6.58579 6.58579C6.96087 6.21071 7.4696 6 8 6C8.5304 6 9.03913 6.21071 9.4142 6.58579C9.78927 6.96087 10 7.4696 10 8Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <button id="debugTabBtn" data-tab="debug" style="display:none;"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" style="vertical-align:middle;"><path d="M8 4.66699V14.0003" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 8.66699H4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 8.66699H14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 4.66659V4C6 2.89543 6.8954 2 8 2C9.1046 2 10 2.89543 10 4V4.66659" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 6C2.89543 6 2 5.10457 2 4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 6C13.1046 6 14 5.10457 14 4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 11.333C2.89543 11.333 2 12.2284 2 13.333" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 11.333C13.1046 11.333 14 12.2284 14 13.333" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/><path d="M9.33333 4.66699H6.66667C5.19391 4.66699 4 5.8609 4 7.33366V10.0003C4 12.2095 5.79086 14.0003 8 14.0003C10.2091 14.0003 12 12.2095 12 10.0003V7.33366C12 5.8609 10.8061 4.66699 9.33333 4.66699Z" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       Autodocs Tab
+       ═══════════════════════════════════════════════════════════ -->
+  <div id="tab-autodocs" class="tab-panel active">
+
+    <div class="autodocs-scroll-area">
+
+    <!-- Empty state -->
+    <div id="autodocs-empty-state" class="autodocs-empty-state">
+      No component set selected.<br>Please select a component set to get started.
+    </div>
+
+    <!-- Status banner -->
+    <div id="statusBanner" class="status-banner" style="display:none;"></div>
+
+    <!-- Sparse grid warning -->
+    <div id="gridWarning" class="grid-warning" style="display:none;">
+      <svg viewBox="0 0 16 16" fill="none"><path d="M8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14Z" stroke="currentColor"/><path d="M8.00195 11.1694V7.14355" stroke="currentColor" stroke-linecap="round"/><path d="M8.00195 4.88666H8.00995" stroke="currentColor" stroke-linecap="round"/></svg>
+      <span><strong>Sparse grid detected.</strong><br>
+      <span id="gridWarningDetail"></span>
+      Consider using the <strong>Organize</strong> tab if the grid layout doesn't look right.</span>
+    </div>
+
+    <!-- Single-type grid info -->
+    <div id="singleTypeGridInfo" class="grid-info" style="display:none;">
+      <svg viewBox="0 0 16 16" fill="none"><path d="M8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14Z" stroke="currentColor"/><path d="M8.00195 11.1694V7.14355" stroke="currentColor" stroke-linecap="round"/><path d="M8.00195 4.88666H8.00995" stroke="currentColor" stroke-linecap="round"/></svg>
+      <span>Single-property grid detected — labels will appear below each item.
+      <label class="option" style="margin-top: 4px;"><input type="checkbox" id="enableSpanning" /> Enable spanning support</label></span>
+    </div>
+
+    <!-- Propstar warning -->
+    <div id="gusSection" style="display:none;">
+      <div class="gus-warning">
+        <svg viewBox="0 0 16 16" fill="none"><path d="M8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14Z" stroke="currentColor"/><path d="M8.00195 11.1694V7.14355" stroke="currentColor" stroke-linecap="round"/><path d="M8.00195 4.88666H8.00995" stroke="currentColor" stroke-linecap="round"/></svg>
+        <span><strong>These docs were created with Propstar.</strong><br>
+        Remove them to generate fresh docs with Obra Autodocs.</span>
+      </div>
+      <button id="removeGus" class="warning" style="margin-top:4px;">Remove Propstar docs</button>
+    </div>
+
+    <!-- Main options section -->
+    <div class="section" id="generateSection">
+      <div class="options">
+        <!-- Generate-only options (hidden when existing docs) -->
+        <div id="generateOptions">
+          <div class="options">
+            <!-- Documentation mode radio group -->
+            <div class="doc-mode-radios">
+              <label class="option doc-mode-option">
+                <input type="radio" name="docMode" value="base" checked />
+                <span>Base component</span>
+                <span class="doc-mode-badge" id="badge-base" style="display:none;">Best</span>
+              </label>
+              <div class="doc-mode-group" id="docModeGroupBoolean">
+                <label class="option doc-mode-option">
+                  <input type="radio" name="docMode" value="boolean" disabled />
+                  <span>Base + Boolean visibility</span>
+                  <span class="doc-mode-badge" id="badge-boolean" style="display:none;">Best</span>
+                </label>
+                <!-- Boolean visibility sub-options -->
+                <div class="sub-option" id="booleanPropsOption" style="display:none;">
+                  <div class="sub-option-heading" id="booleanSectionHeading" style="display:none;">Boolean visibility</div>
+                  <div id="booleanDisplayWrap">
+                  <div style="font-size:var(--font-size-small); color:var(--semantic-text-muted); margin-bottom:2px;">Display:</div>
+                  <div class="boolean-display-radios">
+                    <label class="option">
+                      <input type="radio" name="booleanDisplayMode" value="list" checked />
+                      <span>List</span>
+                    </label>
+                    <label class="option">
+                      <input type="radio" name="booleanDisplayMode" value="grid" />
+                      <span>Grid</span>
+                    </label>
+                  </div>
+                  </div>
+                  <div id="booleanPropsFlat">
+                    <div style="font-size:var(--font-size-small); color:var(--semantic-text-muted); margin-bottom:2px;">Show boolean properties:</div>
+                    <div id="booleanPropsList" class="prop-checklist"></div>
+                  </div>
+                  <select id="booleanCombination" size="3">
+                    <option value="individual" selected>Each property</option>
+                    <option value="combined">Each + all together</option>
+                    <option value="all">Every combination</option>
+                  </select>
+                </div>
+              </div>
+              <div class="doc-mode-group" id="docModeGroupNested">
+                <label class="option doc-mode-option">
+                  <input type="radio" name="docMode" value="nested" disabled />
+                  <span>Base + Nested instances</span>
+                  <span class="doc-mode-badge" id="badge-nested" style="display:none;">Best</span>
+                </label>
+                <!-- Nested instances sub-options -->
+                <div class="sub-option" id="nestedInstancesModeOption" style="display:none;">
+                  <div class="sub-option-heading" id="nestedSectionHeading" style="display:none;">Nested instances</div>
+                  <div style="font-size:var(--font-size-small); color:var(--semantic-text-muted); margin-bottom:2px;">Document which nested instances:</div>
+                  <div id="nestedInstancesList" class="prop-checklist"></div>
+                  <div id="nestedModeWrap">
+                    <select id="nestedInstancesMode" size="2">
+                      <option value="representative" selected>Representative</option>
+                      <option value="full">Full grid</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <label class="option doc-mode-option">
+                <input type="radio" name="docMode" value="both" disabled />
+                <span>Base + Boolean + Nested</span>
+                <span class="doc-mode-badge" id="badge-both" style="display:none;">Best</span>
+              </label>
+              <div id="variantFilterWrap" style="display:none; margin-left:20px;">
+                <div style="font-size:var(--font-size-small); color:var(--semantic-text-muted); margin-bottom:2px;">Document on which variants:</div>
+                <div style="display:flex; flex-direction:column; gap:2px;">
+                  <label class="option">
+                    <input type="radio" name="variantFilter" value="all" checked />
+                    <span>All variants</span>
+                  </label>
+                  <label class="option">
+                    <input type="radio" name="variantFilter" value="specific" />
+                    <span>Specific variants</span>
+                  </label>
+                </div>
+                <div id="booleanScopeChecklist" style="display:none; margin-left:20px;"></div>
+              </div>
+              <div id="booleanCountSummary" style="font-size:var(--font-size-small); color:var(--semantic-text-muted); margin-top:4px; margin-left:20px;"></div>
+              <div id="combinedCountSummary" style="display:none; font-size:var(--font-size-small); color:var(--semantic-text-muted); margin-top:4px; margin-left:20px;"></div>
+            </div>
+            <div class="divider" id="docModeDivider" style="margin:4px 0;"></div>
+            <label class="option">
+              <input type="checkbox" id="generateGrid" checked />
+              Show grid lines
+            </label>
+            <label class="option">
+              <input type="checkbox" id="hidePropertyNames" />
+              Hide property names
+            </label>
+            <label class="option">
+              <input type="checkbox" id="showTitle" />
+              Show title
+            </label>
+            <label class="option">
+              <input type="checkbox" id="showDescription" />
+              Show description
+            </label>
+            <label class="option">
+              <input type="checkbox" id="showDocLink" />
+              Show documentation link
+            </label>
+            <label class="option" id="autoLayoutExtrasOption" style="display:none;">
+              <input type="checkbox" id="autoLayoutExtras" />
+              Auto layout property combinations
+            </label>
+            <!-- Variable modes settings -->
+            <div id="variableModesSection" style="display:none;">
+              <div class="divider" style="margin:4px 0;"></div>
+              <div style="font-size:var(--font-size-small); font-weight:600; margin-bottom:4px;">Variable modes</div>
+              <div id="variableModeCheckboxes" class="prop-checklist"></div>
+            </div>
+            <!-- Shadcn style filter -->
+            <div id="shadcnStyleSection" style="display:none;">
+              <div class="divider" style="margin:4px 0;"></div>
+              <div style="font-size:var(--font-size-small); font-weight:600; margin-bottom:2px;">Shadcn styles</div>
+              <div style="font-size:var(--font-size-small); color:var(--semantic-text-muted); margin-bottom:6px;">Uncheck to hide from docs. Delete removes variants.</div>
+              <div id="shadcnStyleList"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Existing docs options (hidden when no docs) -->
+        <div id="existingOptions" style="display:none;">
+          <div class="options">
+            <label class="option">
+              <input type="checkbox" id="toggleGrid" disabled />
+              Toggle grid lines
+            </label>
+          </div>
+          <div id="existingDocMeta" style="display:none; padding:0 8px;">
+            <div style="font-size:var(--font-size-small); color:var(--semantic-text-muted); margin-top:8px;">
+              <div style="font-weight:600; margin-bottom:4px;">Documented options</div>
+              <div id="existingMetaList" style="line-height:1.6;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Documentation color (shared between both states) -->
+        <div class="color-label">Documentation color</div>
+        <div class="color-swatches" id="colorSwatches"></div>
+        <div class="color-swatches" id="existingColorSwatches" style="display:none;"></div>
+      </div>
+    </div>
+
+    <div id="autodocs-status"></div>
+
+    <!-- Debug -->
+
+    </div><!-- /.autodocs-scroll-area -->
+
+    <!-- Action buttons (fixed at bottom) -->
+    <div class="autodocs-actions">
+      <button id="quickAlign" class="secondary" disabled title="Set all spacing to 40px and apply">&#10024; Auto-align</button>
+      <button id="generate" class="primary" disabled>Generate docs</button>
+      <button id="remove" class="primary" disabled style="display:none;">Remove docs</button>
+      <button id="moreBtn" class="more-btn" disabled title="More options">
+        <svg viewBox="0 0 16 16" fill="none"><path d="M12.0039 7.99609V8.00409" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M8.00391 7.99609V8.00409" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M4.00391 7.99609V8.00409" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <div id="moreMenu" class="more-menu">
+        <button class="more-menu-item" id="generateStandalone">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor"><rect x="2" y="2" width="12" height="12" rx="1.5" stroke-dasharray="3 2"/><path d="M5 6h6M5 8.5h6M5 11h3"/></svg>
+          Generate standalone docs
+        </button>
+        <!-- Variable modes moved to Generate tab settings -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       Groupify Tab
+       ═══════════════════════════════════════════════════════════ -->
+  <div id="tab-org" class="tab-panel">
+    <div id="groupify-empty-state" class="groupify-empty-state">
+      Select a component set to get started.
+    </div>
+
+    <div id="groupify-overflow-warning" style="display:none; padding:8px 10px; margin:8px 8px 4px; font-size:var(--font-size-small); color:var(--semantic-text-body); background:var(--semantic-bg-warning); border:1px solid var(--semantic-border-warning); border-radius:var(--border-radius-med); line-height:1.4;">
+      This component has absolutely positioned elements (e.g.&nbsp;dropdown menus) that overflow variant frames. The Organize tab cannot rearrange these variants &mdash; use Generate to create docs with overflow-adjusted grid sizing.
+    </div>
+
+    <div id="groupify-content">
+      <div class="groupify-scroll-area" id="groupify-scroll-area">
+        <!-- Preferred axis -->
+        <div class="preferred-axis-row">
+          <span class="groupify-section-label">Preferred axis</span>
+          <div class="segmented-control" id="axisControl">
+            <button id="axis-auto" class="active" onclick="groupifySetPreferredAxis(null)">Auto</button>
+            <button id="axis-x" onclick="groupifySetPreferredAxis('x')">X</button>
+            <button id="axis-y" onclick="groupifySetPreferredAxis('y')">Y</button>
+          </div>
+        </div>
+
+        <!-- Paddings -->
+        <div class="paddings-header">
+          <span class="groupify-section-label">Component set padding</span>
+        </div>
+        <div id="pad-mode-presets" class="padding-presets"></div>
+        <div id="pad-mode-custom" style="display:none;">
+          <div class="paddings-row">
+            <div class="padding-field">
+              <svg viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" stroke-linecap="round" stroke-linejoin="round"/><line x1="2" y1="5" x2="14" y2="5"/></svg>
+              <input type="number" id="pad-top" value="24" min="0" oninput="groupifyOnPaddingInput(this)">
+            </div>
+            <div class="padding-field">
+              <svg viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" stroke-linecap="round" stroke-linejoin="round"/><line x1="11" y1="2" x2="11" y2="14"/></svg>
+              <input type="number" id="pad-right" value="24" min="0" oninput="groupifyOnPaddingInput(this)">
+            </div>
+            <div class="padding-field">
+              <svg viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" stroke-linecap="round" stroke-linejoin="round"/><line x1="2" y1="11" x2="14" y2="11"/></svg>
+              <input type="number" id="pad-bottom" value="24" min="0" oninput="groupifyOnPaddingInput(this)">
+            </div>
+            <div class="padding-field">
+              <svg viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" stroke-linecap="round" stroke-linejoin="round"/><line x1="5" y1="2" x2="5" y2="14"/></svg>
+              <input type="number" id="pad-left" value="24" min="0" oninput="groupifyOnPaddingInput(this)">
+            </div>
+            <button class="lock-btn active" id="pad-lock" data-tooltip="Lock to first value" onclick="groupifyTogglePadLock()">
+              <svg viewBox="0 0 16 16" fill="none"><path d="M12 7.33331H4.00004C3.63185 7.33331 3.33337 7.63178 3.33337 7.99998V13.3333C3.33337 13.7015 3.63185 14 4.00004 14H12C12.3682 14 12.6667 13.7015 12.6667 13.3333V7.99998C12.6667 7.63178 12.3682 7.33331 12 7.33331Z" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.6667 4.66667V7.33333H5.33337V4.66667C5.33337 3.2 6.53337 2 8.00004 2C9.46671 2 10.6667 3.2 10.6667 4.66667Z" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Section direction controls -->
+        <div id="groupify-section-controls">
+          <hr class="g-divider">
+          <div class="section-header">
+            <span class="groupify-section-label">Section layout</span>
+            <div class="section-dir-row">
+              <button class="dir-btn" id="sec-dir-h" data-tooltip="Horizontal" onclick="groupifySetSectionDirection('HORIZONTAL')">
+                <svg viewBox="0 0 16 16"><rect x="1" y="3" width="6" height="10" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="9" y="3" width="6" height="10" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+              </button>
+              <button class="dir-btn" id="sec-dir-v" data-tooltip="Vertical" onclick="groupifySetSectionDirection('VERTICAL')">
+                <svg viewBox="0 0 16 16"><rect x="3" y="1" width="10" height="6" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="9" width="10" height="6" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+              </button>
+              <button class="dir-btn" id="sec-dir-grid" data-tooltip="Grid" onclick="groupifySetSectionDirection('GRID')">
+                <svg viewBox="0 0 16 16" fill="none"><path d="M12.6667 2.66669H10C9.63184 2.66669 9.33337 2.96517 9.33337 3.33335V6.00002C9.33337 6.36821 9.63184 6.66669 10 6.66669H12.6667C13.0349 6.66669 13.3334 6.36821 13.3334 6.00002V3.33335C13.3334 2.96517 13.0349 2.66669 12.6667 2.66669Z" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M12.6667 9.33331H10C9.63184 9.33331 9.33337 9.63178 9.33337 9.99998V12.6666C9.33337 13.0348 9.63184 13.3333 10 13.3333H12.6667C13.0349 13.3333 13.3334 13.0348 13.3334 12.6666V9.99998C13.3334 9.63178 13.0349 9.33331 12.6667 9.33331Z" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.99996 2.66669H3.33329C2.96511 2.66669 2.66663 2.96517 2.66663 3.33335V6.00002C2.66663 6.36821 2.96511 6.66669 3.33329 6.66669H5.99996C6.36815 6.66669 6.66663 6.36821 6.66663 6.00002V3.33335C6.66663 2.96517 6.36815 2.66669 5.99996 2.66669Z" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.99996 9.33331H3.33329C2.96511 9.33331 2.66663 9.63178 2.66663 9.99998V12.6666C2.66663 13.0348 2.96511 13.3333 3.33329 13.3333H5.99996C6.36815 13.3333 6.66663 13.0348 6.66663 12.6666V9.99998C6.66663 9.63178 6.36815 9.33331 5.99996 9.33331Z" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div id="groupify-properties-container"></div>
+      </div>
+    </div>
+
+    <div class="reorder-notice" id="groupify-reorder-notice">
+      <span>Property order changed. Adjust the order in your component properties to match.</span>
+      <span class="reorder-info-wrap">
+        <svg class="reorder-info-icon" viewBox="0 0 16 16" fill="none"><path d="M8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14Z" stroke="currentColor"/><path d="M8.00195 11.1694V7.14355" stroke="currentColor" stroke-linecap="round"/><path d="M8.00195 4.88666H8.00995" stroke="currentColor" stroke-linecap="round"/></svg>
+        <div class="reorder-info-tooltip">When you have found the desired grouping, please adjust the property order manually in your component. We cannot programmatically sync the order; if someone else re-generates documentation, your setup will be undone if the property order doesn't match.</div>
+      </span>
+    </div>
+    <div class="groupify-actions">
+      <button id="groupify-quick-align" class="secondary" disabled onclick="groupifyQuickAlign()" data-tooltip="Set all spacing to 40px and apply">&#10024; Auto-align</button>
+      <span class="groupify-actions-divider"></span>
+      <button id="groupify-apply" class="primary" disabled onclick="groupifyAutoApply()">Apply layout</button>
+      <label class="auto-apply-label">
+        <input type="checkbox" id="groupify-auto-apply-toggle" onchange="groupifyToggleAutoApply(this.checked)" />
+        Auto
+      </label>
+    </div>
+    <div id="groupify-status"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       Navigate Tab
+       ═══════════════════════════════════════════════════════════ -->
+  <div id="tab-navigate" class="tab-panel">
+    <p class="nav-description">Navigate and select components in documentation grids.</p>
+    <button id="nav-close-plugin" class="nav-focus-btn" title="Close plugin and keep current selection — keyboard focus returns to Figma">Close &amp; keep selection</button>
+    <div class="nav-tools-content">
+      <div class="dpad-container">
+        <div class="dpad">
+          <button class="dpad-btn dpad-up" id="nav-move-up" title="Move selection up">&#9650;</button>
+          <button class="dpad-btn dpad-left" id="nav-move-left" title="Move selection left">&#9664;</button>
+          <div class="dpad-center"></div>
+          <button class="dpad-btn dpad-right" id="nav-move-right" title="Move selection right">&#9654;</button>
+          <button class="dpad-btn dpad-down" id="nav-move-down" title="Move selection down">&#9660;</button>
+        </div>
+        <span class="dpad-label">Move</span>
+      </div>
+      <div class="expand-controls">
+        <div>
+          <span class="nav-group-label">Expand Rows</span>
+          <div class="nav-selection-buttons">
+            <button id="nav-add-prev-row" title="Add previous row">+ Up</button>
+            <button id="nav-select-row" title="Select entire row">All</button>
+            <button id="nav-add-next-row" title="Add next row">+ Down</button>
+          </div>
+        </div>
+        <div>
+          <span class="nav-group-label">Expand Columns</span>
+          <div class="nav-selection-buttons">
+            <button id="nav-add-prev-column" title="Add previous column">+ Left</button>
+            <button id="nav-select-column" title="Select entire column">All</button>
+            <button id="nav-add-next-column" title="Add next column">+ Right</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr class="nav-divider">
+    <div class="deep-variant-section">
+      <div class="section-title">Extend / reduce selection</div>
+      <div id="deep-variant-chips">
+        <p class="deep-variant-empty">Select a variant inside a component set to see options.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       Settings Tab
+       ═══════════════════════════════════════════════════════════ -->
+  <div id="tab-settings" class="tab-panel">
+    <div class="section">
+      <div class="section-title">Spacing presets</div>
+      <p class="settings-desc">Values shown as preset buttons for component set padding and property spacing in Organize.</p>
+      <div id="settings-spacing-list" class="settings-chip-list"></div>
+      <div class="settings-add-row">
+        <input type="number" id="settings-add-spacing" min="1" placeholder="e.g. 48">
+        <button onclick="settingsAddSpacing()">Add</button>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Font</div>
+      <p class="settings-desc">Font family used for doc labels. Must be available in your Figma file.</p>
+      <div class="settings-add-row">
+        <input type="text" id="settings-font-family" value="Inter" placeholder="e.g. Inter" style="flex:1">
+        <button onclick="settingsSaveFont()">Apply</button>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Layer name</div>
+      <p class="settings-desc">Suffix for the documentation wrapper layer name (e.g. "❖ Button — <em>your label</em>").</p>
+      <div class="settings-add-row">
+        <input type="text" id="settings-doc-label" value="Obra Autodocs" placeholder="e.g. Obra Autodocs" style="flex:1">
+        <button onclick="settingsSaveDocLabel()">Apply</button>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Colors</div>
+      <p class="settings-desc">Saved colors appear as quick-pick swatches when generating docs.</p>
+      <div id="settings-color-list" class="settings-chip-list"></div>
+      <div class="settings-add-row">
+        <input type="color" id="settings-add-color" value="#9747FF">
+        <button onclick="settingsAddColor()">Add</button>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Boolean visibility default</div>
+      <p class="settings-desc">Default display mode for boolean property visibility.</p>
+      <select id="settings-booleanDisplayMode" style="width:100%;" onchange="settingsSaveBooleanDisplayMode()">
+        <option value="list">List</option>
+        <option value="grid">Grid</option>
+      </select>
+    </div>
+    <div class="section" style="margin-top:auto;">
+      <p class="settings-desc">This plugin was made with ❤️ by <a href="https://obra.studio" target="_blank" style="color:var(--primary-color);">Obra Studio</a>.</p>
+      <p class="settings-desc">Check out our <a href="https://shadcn.obra.studio" target="_blank" style="color:var(--primary-color);">shadcn/ui kit</a>, trusted by over 40,000 designers.</p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       Migrate Tab
+       ═══════════════════════════════════════════════════════════ -->
+  <div id="tab-migrate" class="tab-panel" style="padding:12px;gap:8px;">
+    <p style="font-size:var(--font-size-small);color:var(--semantic-text-muted);line-height:1.5;margin:0;">
+      Find PropStar docs and migrate them to Obra Autodocs.
+    </p>
+    <button id="migrateScanBtn">Scan file</button>
+    <div id="migrateScanResults" style="display:none; font-size:var(--font-size-small); color:var(--semantic-text-muted); overflow-y:auto;"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       Debug Tab
+       ═══════════════════════════════════════════════════════════ -->
+  <div id="tab-debug" class="tab-panel" style="padding:12px;gap:8px;">
+    <div class="section">
+      <div class="section-title">Options</div>
+      <div class="options">
+        <label class="option">
+          <input type="checkbox" id="debugMode" />
+          Verbose logging
+        </label>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Feature flags</div>
+      <div class="options">
+        <label class="option">
+          <input type="checkbox" id="flag-autoLayoutExtras" />
+          Auto layout property combinations
+        </label>
+        <label class="option">
+          <input type="checkbox" id="flag-forceAutoApply" checked />
+          Force auto-apply in Organize
+        </label>
+      </div>
+    </div>
+    <div class="section" style="gap:4px;">
+      <div class="section-title">Log to console</div>
+      <button id="debugGrid">Log grid coords</button>
+      <button id="debugLabels">Log label coords</button>
+      <button id="debugBooleanGrid">Log boolean grid coords</button>
+      <button id="debugLogSettings">Log settings snapshot</button>
+    </div>
+  </div>
+
+  <script>
+    // ═══════════════════════════════════════════════════════════
+    // Tab switching
+    // ═══════════════════════════════════════════════════════════
+
+    var tabButtons = document.querySelectorAll('#main-tab-bar button');
+    for (var t = 0; t < tabButtons.length; t++) {
+      tabButtons[t].addEventListener('click', function() {
+        var tabName = this.getAttribute('data-tab');
+        // Update buttons
+        for (var b = 0; b < tabButtons.length; b++) {
+          tabButtons[b].classList.remove('active');
+        }
+        this.classList.add('active');
+        // Update panels
+        document.getElementById('tab-autodocs').classList.remove('active');
+        document.getElementById('tab-org').classList.remove('active');
+        document.getElementById('tab-navigate').classList.remove('active');
+        document.getElementById('tab-migrate').classList.remove('active');
+        document.getElementById('tab-settings').classList.remove('active');
+        document.getElementById('tab-debug').classList.remove('active');
+        document.getElementById('tab-' + tabName).classList.add('active');
+      });
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    // Autodocs
+    // ═══════════════════════════════════════════════════════════
+
+    var statusBannerEl = document.getElementById('statusBanner');
+    var generateBtn = document.getElementById('generate');
+    var removeBtn = document.getElementById('remove');
+    var quickAlignBtn = document.getElementById('quickAlign');
+    var statusEl = document.getElementById('autodocs-status');
+
+    var hasComponentSet = false;
+    var isStandalone = false;
+    var hasWrapper = false;
+    var hasOverflow = false;
+    var allowSpanning = false;
+    var debugVisible = false;
+
+    document.getElementById('enableSpanning').addEventListener('change', function() {
+      allowSpanning = this.checked;
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.altKey && e.code === 'KeyD') {
+        debugVisible = !debugVisible;
+        document.getElementById('debugTabBtn').style.display = debugVisible ? '' : 'none';
+        if (!debugVisible) {
+          // If currently on debug tab, switch back to autodocs
+          if (document.getElementById('tab-debug').classList.contains('active')) {
+            document.getElementById('debugTabBtn').classList.remove('active');
+            document.getElementById('tab-debug').classList.remove('active');
+            document.querySelector('[data-tab="autodocs"]').classList.add('active');
+            document.getElementById('tab-autodocs').classList.add('active');
+          }
+        }
+      }
+    });
+
+    function showSpinner(text) {
+      statusEl.className = '';
+      statusEl.innerHTML = '<div class="spinner"></div>' + text;
+    }
+    var SUCCESS_CHECK_ICON = '<svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14Z" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.33337 8.33331L7.11117 10.3333L10.6667 6.33331" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    var BANNER_CHECK_ICON = '<svg viewBox="0 0 16 16" fill="none"><path d="M8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14Z" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.33337 8.33331L7.11117 10.3333L10.6667 6.33331" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    var BANNER_INFO_ICON = '<svg viewBox="0 0 16 16" fill="none"><path d="M8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14Z" stroke="currentColor"/><path d="M8.00195 11.1694V7.14355" stroke="currentColor" stroke-linecap="round"/><path d="M8.00195 4.88666H8.00995" stroke="currentColor" stroke-linecap="round"/></svg>';
+    function showBanner(type, text) {
+      statusBannerEl.className = 'status-banner ' + type;
+      statusBannerEl.innerHTML = (type === 'success' ? BANNER_CHECK_ICON : BANNER_INFO_ICON) + text;
+      statusBannerEl.style.display = 'flex';
+    }
+    function hideBanner() {
+      statusBannerEl.style.display = 'none';
+    }
+    function showGenerateState() {
+      document.getElementById('generateOptions').style.display = 'block';
+      document.getElementById('existingOptions').style.display = 'none';
+      document.getElementById('colorSwatches').style.display = 'flex';
+      document.getElementById('existingColorSwatches').style.display = 'none';
+      generateBtn.style.display = 'block';
+      removeBtn.style.display = 'none';
+    }
+    function showExistingState() {
+      document.getElementById('generateOptions').style.display = 'none';
+      document.getElementById('existingOptions').style.display = 'block';
+      document.getElementById('colorSwatches').style.display = 'none';
+      document.getElementById('existingColorSwatches').style.display = 'flex';
+      generateBtn.style.display = 'none';
+      removeBtn.style.display = 'block';
+    }
+
+    // ─── More Menu ───
+    var moreBtn = document.getElementById('moreBtn');
+    var moreMenu = document.getElementById('moreMenu');
+
+    moreBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      moreMenu.classList.toggle('open');
+    });
+    document.addEventListener('click', function() {
+      moreMenu.classList.remove('open');
+    });
+    moreMenu.addEventListener('click', function(e) {
+      e.stopPropagation();
+    });
+
+    // ─── Restore Per-Component Settings ───
+    function restoreComponentSettings(s) {
+      if (!s) return;
+
+      // Simple checkboxes
+      if (s.showTitle !== undefined) document.getElementById('showTitle').checked = s.showTitle;
+      if (s.showDescription !== undefined) document.getElementById('showDescription').checked = s.showDescription;
+      if (s.showDocLink !== undefined) document.getElementById('showDocLink').checked = s.showDocLink;
+      if (s.showGrid !== undefined) document.getElementById('generateGrid').checked = s.showGrid;
+      if (s.hidePropertyNames !== undefined) document.getElementById('hidePropertyNames').checked = s.hidePropertyNames;
+      if (s.autoLayoutExtras !== undefined) document.getElementById('autoLayoutExtras').checked = s.autoLayoutExtras;
+
+      // Color
+      if (s.color) document.getElementById('docColor').value = s.color;
+
+      // Doc mode (base / boolean / nested / both)
+      if (s.docMode) {
+        var modeRadio = document.querySelector('input[name="docMode"][value="' + s.docMode + '"]');
+        if (modeRadio && !modeRadio.disabled) {
+          modeRadio.checked = true;
+          syncDocModeSubOptions();
+        }
+      }
+
+      // Boolean options
+      if (s.booleanCombination) document.getElementById('booleanCombination').value = s.booleanCombination;
+      if (s.booleanDisplayMode) {
+        var dmRadio = document.querySelector('input[name="booleanDisplayMode"][value="' + s.booleanDisplayMode + '"]');
+        if (dmRadio) dmRadio.checked = true;
+      }
+
+      // Boolean props checklist — check only the ones that were enabled
+      if (s.enabledBooleanProps && s.enabledBooleanProps.length > 0) {
+        var boolChecks = document.querySelectorAll('#booleanPropsList input[type="checkbox"]');
+        for (var i = 0; i < boolChecks.length; i++) {
+          boolChecks[i].checked = s.enabledBooleanProps.indexOf(boolChecks[i].value) !== -1;
+        }
+      }
+
+      // Nested instances mode
+      if (s.nestedInstancesMode) document.getElementById('nestedInstancesMode').value = s.nestedInstancesMode;
+
+      // Nested instances checklist — check only the ones that were enabled
+      if (s.enabledNestedInstances && s.enabledNestedInstances.length > 0) {
+        var nestedChecks = document.querySelectorAll('#nestedInstancesList input[type="checkbox"]');
+        for (var i = 0; i < nestedChecks.length; i++) {
+          nestedChecks[i].checked = s.enabledNestedInstances.indexOf(nestedChecks[i].value) !== -1;
+        }
+      }
+
+      // Spanning
+      if (s.allowSpanning) {
+        allowSpanning = true;
+        document.getElementById('enableSpanning').checked = true;
+      }
+
+      // Update sub-option visibility after restoring
+      updateBooleanOptions();
+      updateNestedOptions();
+    }
+
+    function buildGenerateMessage(overrides) {
+      var msg = {
+        type: 'generate',
+        showTitle: document.getElementById('showTitle').checked,
+        showDescription: document.getElementById('showDescription').checked,
+        showDocLink: document.getElementById('showDocLink').checked,
+        showGrid: document.getElementById('generateGrid').checked,
+        color: document.getElementById('docColor').value,
+        showBooleanVisibility: (getDocMode() === 'boolean' || getDocMode() === 'both') && getEnabledBooleanNames().length > 0,
+        booleanCombination: document.getElementById('booleanCombination').value,
+        booleanDisplayMode: getBooleanDisplayMode(),
+        booleanImprovedAccuracy: true,
+        enabledBooleanProps: getEnabledBooleanNames(),
+        booleanScope: getBooleanScopeData(),
+        showNestedInstances: (getDocMode() === 'nested' || getDocMode() === 'both'),
+        nestedInstancesMode: document.getElementById('nestedInstancesMode').value,
+        enabledNestedInstances: getEnabledNestedNames(),
+        standaloneDoc: false,
+        fontFamily: settings_fontFamily,
+        docLabel: settings_docLabel,
+        variableModes: getSelectedVariableModes(),
+        hidePropertyNames: document.getElementById('hidePropertyNames').checked,
+        allowSpanning: allowSpanning,
+        autoLayoutExtras: document.getElementById('autoLayoutExtras').checked,
+        docMode: getDocMode(),
+      };
+      if (overrides) {
+        for (var k in overrides) msg[k] = overrides[k];
+      }
+      return msg;
+    }
+
+    document.getElementById('generateStandalone').addEventListener('click', function() {
+      if (!hasComponentSet) return;
+      moreMenu.classList.remove('open');
+      generateBtn.disabled = true;
+      moreBtn.disabled = true;
+      showSpinner('Generating standalone docs...');
+      parent.postMessage({ pluginMessage: buildGenerateMessage({ standaloneDoc: true }) }, '*');
+    });
+
+    // Variable modes now included in main Generate button via buildGenerateMessage()
+    function hideSpinner(text, cls) {
+      statusEl.className = cls || '';
+      if (cls === 'success' && text) {
+        statusEl.innerHTML = SUCCESS_CHECK_ICON + text;
+      } else {
+        statusEl.textContent = text;
+      }
+    }
+
+    // ─── Existing Doc Meta (read-only) ───
+
+    function updateExistingDocMeta(meta) {
+      var container = document.getElementById('existingDocMeta');
+      var list = document.getElementById('existingMetaList');
+      list.innerHTML = '';
+      if (!meta) { container.style.display = 'none'; return; }
+
+      var items = [];
+      if (meta.booleanProps && meta.booleanProps.length > 0) {
+        items.push('Boolean: ' + meta.booleanProps.join(', '));
+      } else if (meta.hasBooleanGrid) {
+        items.push('Boolean grid');
+      }
+      if (meta.nestedInstances && meta.nestedInstances.length > 0) {
+        items.push('Nested: ' + meta.nestedInstances.join(', '));
+      }
+      if (meta.modes.length > 0) {
+        items.push('Modes: ' + meta.modes.join(', '));
+      }
+
+      if (items.length === 0) { container.style.display = 'none'; return; }
+      container.style.display = 'block';
+      for (var i = 0; i < items.length; i++) {
+        var div = document.createElement('div');
+        div.textContent = items[i];
+        list.appendChild(div);
+      }
+    }
+
+    // ─── Shadcn Style Filter ───
+
+    var _shadcnStyleInfo = null;
+
+    function updateShadcnStyleUI(info) {
+      _shadcnStyleInfo = info || null;
+      var section = document.getElementById('shadcnStyleSection');
+      var list = document.getElementById('shadcnStyleList');
+      list.innerHTML = '';
+      if (!info || !info.values || info.values.length < 2) {
+        section.style.display = 'none';
+        return;
+      }
+      section.style.display = 'block';
+
+      var visibleCount = 0;
+      for (var i = 0; i < info.values.length; i++) {
+        if (!info.values[i].hidden) visibleCount++;
+      }
+
+      for (var k = 0; k < info.values.length; k++) {
+        (function(v) {
+          var row = document.createElement('div');
+          row.style.display = 'flex';
+          row.style.alignItems = 'center';
+          row.style.gap = '8px';
+          row.style.padding = '2px 0';
+
+          var lbl = document.createElement('label');
+          lbl.className = 'option';
+          lbl.style.flex = '1';
+          lbl.style.margin = '0';
+
+          var cb = document.createElement('input');
+          cb.type = 'checkbox';
+          cb.checked = !v.hidden;
+          if (!v.hidden && visibleCount === 1) cb.disabled = true;
+          cb.onchange = function() {
+            var newHidden = [];
+            for (var j = 0; j < info.values.length; j++) {
+              var iv = info.values[j];
+              if (iv.name === v.name) {
+                if (!cb.checked) newHidden.push(iv.name);
+              } else if (iv.hidden) {
+                newHidden.push(iv.name);
+              }
+            }
+            parent.postMessage({ pluginMessage: {
+              type: 'set-hidden-styles',
+              hidden: newHidden,
+              regenOptions: buildGenerateMessage()
+            } }, '*');
+          };
+          lbl.appendChild(cb);
+          var text = document.createElement('span');
+          text.textContent = v.name + ' (' + v.count + ')';
+          lbl.appendChild(text);
+          row.appendChild(lbl);
+
+          var del = document.createElement('button');
+          del.type = 'button';
+          del.textContent = 'Delete';
+          del.style.fontSize = '10px';
+          del.style.padding = '2px 8px';
+          del.style.border = '1px solid var(--semantic-border, #e5e5e5)';
+          del.style.borderRadius = '4px';
+          del.style.background = 'transparent';
+          del.style.cursor = 'pointer';
+          del.style.color = '#d33';
+          if (info.values.length === 1) del.disabled = true;
+          del.onclick = function() {
+            var msg = 'Delete ' + v.count + ' "' + v.name + '" variant' + (v.count === 1 ? '' : 's') + '?\n\nThis cannot be undone (outside Figma undo).';
+            if (!confirm(msg)) return;
+            parent.postMessage({ pluginMessage: {
+              type: 'delete-style-variants',
+              value: v.name,
+              regenOptions: buildGenerateMessage()
+            } }, '*');
+          };
+          row.appendChild(del);
+
+          list.appendChild(row);
+        })(info.values[k]);
+      }
+    }
+
+    // ─── Variable Modes ───
+
+    var _variableCollections = [];
+    var _savedVariableModePrefs = null; // persisted { collectionId, modeIds: ['id1','id2'] }
+
+    function updateVariableModesUI(collections) {
+      _variableCollections = collections || [];
+      var section = document.getElementById('variableModesSection');
+      var list = document.getElementById('variableModeCheckboxes');
+      list.innerHTML = '';
+
+      // Count total non-default modes across all collections
+      var totalModes = 0;
+      for (var ci = 0; ci < _variableCollections.length; ci++) {
+        totalModes += Math.max(0, _variableCollections[ci].modes.length - 1);
+      }
+      if (totalModes === 0) {
+        section.style.display = 'none';
+        return;
+      }
+      section.style.display = 'block';
+
+      var multiCollection = _variableCollections.length > 1;
+
+      // Build saved lookup: { modeId: true }
+      var savedLookup = {};
+      if (_savedVariableModePrefs && _savedVariableModePrefs.modeIds) {
+        for (var si = 0; si < _savedVariableModePrefs.modeIds.length; si++) {
+          savedLookup[_savedVariableModePrefs.modeIds[si]] = true;
+        }
+      }
+
+      // Flat list of all modes from all collections (skip default/first mode)
+      for (var ci2 = 0; ci2 < _variableCollections.length; ci2++) {
+        var coll = _variableCollections[ci2];
+        for (var m = 1; m < coll.modes.length; m++) {
+          var label = document.createElement('label');
+          label.className = 'option';
+          label.style.fontSize = 'var(--font-size-small)';
+          var cb = document.createElement('input');
+          cb.type = 'checkbox';
+          cb.value = coll.modes[m].modeId;
+          cb.dataset.modeName = coll.modes[m].name;
+          cb.dataset.collectionId = coll.id;
+          cb.checked = !!savedLookup[coll.modes[m].modeId];
+          cb.addEventListener('change', saveVariableModePrefs);
+          label.appendChild(cb);
+          var displayName = multiCollection ? coll.name + ' / ' + coll.modes[m].name : coll.modes[m].name;
+          label.appendChild(document.createTextNode(' ' + displayName));
+          list.appendChild(label);
+        }
+      }
+    }
+
+    function saveVariableModePrefs() {
+      var checkboxes = document.getElementById('variableModeCheckboxes').querySelectorAll('input[type="checkbox"]:checked');
+      var modeIds = [];
+      for (var i = 0; i < checkboxes.length; i++) {
+        modeIds.push(checkboxes[i].value);
+      }
+      _savedVariableModePrefs = { modeIds: modeIds };
+      parent.postMessage({ pluginMessage: { type: 'save-variable-mode-prefs', prefs: _savedVariableModePrefs } }, '*');
+    }
+
+    function getSelectedVariableModes() {
+      var checkboxes = document.getElementById('variableModeCheckboxes').querySelectorAll('input[type="checkbox"]:checked');
+      if (checkboxes.length === 0) return null;
+      // Group checked modes by mode name — modes with the same name across collections
+      // get applied together on a single frame (e.g. "neutral-dark" from both
+      // "components" and "semantic colors" collections)
+      var byName = {};
+      var nameOrder = [];
+      for (var i = 0; i < checkboxes.length; i++) {
+        var modeName = checkboxes[i].dataset.modeName;
+        if (!byName[modeName]) {
+          byName[modeName] = [];
+          nameOrder.push(modeName);
+        }
+        byName[modeName].push({ collectionId: checkboxes[i].dataset.collectionId, modeId: checkboxes[i].value });
+      }
+      var groups = [];
+      for (var ni = 0; ni < nameOrder.length; ni++) {
+        groups.push({ name: nameOrder[ni], collections: byName[nameOrder[ni]] });
+      }
+      return { groups: groups };
+    }
+
+    quickAlignBtn.addEventListener('click', function() {
+      if (!hasComponentSet) return;
+      quickAlignBtn.disabled = true;
+      parent.postMessage({ pluginMessage: {
+        type: 'groupify-quick-align',
+        spacing: 40
+      } }, '*');
+    });
+
+    generateBtn.addEventListener('click', function() {
+      if (!hasComponentSet) return;
+      generateBtn.disabled = true;
+      moreBtn.disabled = true;
+      showSpinner('Generating...');
+      parent.postMessage({ pluginMessage: buildGenerateMessage() }, '*');
+    });
+
+    document.getElementById('toggleGrid').addEventListener('change', function(e) {
+      if (!hasWrapper) return;
+      parent.postMessage({ pluginMessage: {
+        type: 'toggleGrid',
+        showGrid: e.target.checked,
+      } }, '*');
+    });
+
+    var DEFAULT_COLOR = '#9747FF';
+
+    // --- Color swatch builder ---
+    var settings_colorPresets = ["#9747FF", "#CBA3FF"].map(function(c) { return c.toUpperCase(); });
+    function buildColorSwatches() {
+      var container = document.getElementById('colorSwatches');
+      container.innerHTML = '';
+      var currentColor = (container._selectedColor || DEFAULT_COLOR).toUpperCase();
+      var hasMatch = false;
+
+      for (var i = 0; i < settings_colorPresets.length; i++) {
+        (function(hex) {
+          var swatch = document.createElement('div');
+          swatch.className = 'color-swatch';
+          swatch.style.background = hex;
+          var isActive = hex.toUpperCase() === currentColor;
+          if (isActive) { swatch.classList.add('active'); hasMatch = true; }
+          swatch.onclick = function() {
+            var all = container.querySelectorAll('.color-swatch');
+            for (var s = 0; s < all.length; s++) all[s].classList.remove('active');
+            swatch.classList.add('active');
+            container._selectedColor = hex;
+            var docColor = document.getElementById('docColor');
+            if (docColor) docColor.value = hex;
+          };
+          container.appendChild(swatch);
+        })(settings_colorPresets[i]);
+      }
+
+      // Hidden input to store selected color for generate
+      var hidden = document.createElement('input');
+      hidden.type = 'hidden';
+      hidden.id = 'docColor';
+      hidden.value = hasMatch ? currentColor : (container._selectedColor || DEFAULT_COLOR);
+      container.appendChild(hidden);
+
+      // Info icon with tooltip
+      var infoIcon = document.createElement('span');
+      infoIcon.className = 'swatch-info';
+      infoIcon.setAttribute('data-tooltip', 'Add custom colors in Settings');
+      infoIcon.innerHTML = '<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14Z" stroke="currentColor"/><path d="M8.00195 11.1694V7.14355" stroke="currentColor" stroke-linecap="round"/><path d="M8.00195 4.88666H8.00995" stroke="currentColor" stroke-linecap="round"/></svg>';
+      container.appendChild(infoIcon);
+
+      // If no swatch matched, select first one
+      if (!hasMatch && settings_colorPresets.length > 0) {
+        var first = container.querySelector('.color-swatch');
+        if (first) {
+          first.classList.add('active');
+          container._selectedColor = settings_colorPresets[0];
+          hidden.value = settings_colorPresets[0];
+        }
+      }
+    }
+    buildColorSwatches();
+
+    function buildExistingColorSwatches(activeColor) {
+      var container = document.getElementById('existingColorSwatches');
+      container.innerHTML = '';
+      var currentColor = (activeColor || DEFAULT_COLOR).toUpperCase();
+
+      for (var i = 0; i < settings_colorPresets.length; i++) {
+        (function(hex) {
+          var swatch = document.createElement('div');
+          swatch.className = 'color-swatch';
+          swatch.style.background = hex;
+          if (hex.toUpperCase() === currentColor) swatch.classList.add('active');
+          swatch.onclick = function() {
+            if (!hasWrapper) return;
+            var all = container.querySelectorAll('.color-swatch');
+            for (var s = 0; s < all.length; s++) all[s].classList.remove('active');
+            swatch.classList.add('active');
+            container._selectedColor = hex;
+            // Also update the generate swatches
+            document.getElementById('docColor').value = hex;
+            parent.postMessage({ pluginMessage: { type: 'changeColor', color: hex } }, '*');
+          };
+          container.appendChild(swatch);
+        })(settings_colorPresets[i]);
+      }
+    }
+    buildExistingColorSwatches(DEFAULT_COLOR);
+
+    var currentBooleanPropNames = [];
+    var currentVariantCount = 0;
+    var currentNestedInfo = [];
+    var currentProperties = []; // [{name, values}] enum props from selection
+
+    function getEnabledBooleanCount() {
+      var checks = document.querySelectorAll('#booleanPropsList input[type="checkbox"]');
+      var n = 0;
+      for (var i = 0; i < checks.length; i++) {
+        if (checks[i].checked) n++;
+      }
+      return n;
+    }
+
+    function getEnabledBooleanNames() {
+      var checks = document.querySelectorAll('#booleanPropsList input[type="checkbox"]');
+      var names = [];
+      for (var i = 0; i < checks.length; i++) {
+        if (checks[i].checked) names.push(checks[i].value);
+      }
+      return names;
+    }
+
+    function buildBooleanPropsList() {
+      var container = document.getElementById('booleanPropsList');
+      container.innerHTML = '';
+      for (var i = 0; i < currentBooleanPropNames.length; i++) {
+        var label = document.createElement('label');
+        var cb = document.createElement('input');
+        cb.type = 'checkbox';
+        cb.checked = true;
+        cb.value = currentBooleanPropNames[i];
+        cb.addEventListener('change', function() { updateBooleanOptions(); });
+        label.appendChild(cb);
+        label.appendChild(document.createTextNode(currentBooleanPropNames[i]));
+        container.appendChild(label);
+      }
+    }
+
+    var booleanFilterEntries = [];
+
+    function buildBooleanScopeChecklist() {
+      var container = document.getElementById('booleanScopeChecklist');
+      container.innerHTML = '';
+      booleanFilterEntries = [];
+
+      if (currentProperties.length === 0) return;
+
+      // Filter builder: per-property select rows
+      var builder = document.createElement('div');
+      builder.className = 'filter-builder';
+      builder.id = 'filterBuilder';
+
+      for (var i = 0; i < currentProperties.length; i++) {
+        var prop = currentProperties[i];
+        var row = document.createElement('div');
+        row.className = 'filter-prop-row';
+
+        var label = document.createElement('span');
+        label.className = 'filter-prop-label';
+        label.textContent = prop.name + ':';
+        row.appendChild(label);
+
+        var select = document.createElement('select');
+        select.className = 'filter-prop-select';
+        select.setAttribute('data-property', prop.name);
+
+        var allOpt = document.createElement('option');
+        allOpt.value = '__all__';
+        allOpt.textContent = 'All';
+        select.appendChild(allOpt);
+
+        for (var vi = 0; vi < prop.values.length; vi++) {
+          var opt = document.createElement('option');
+          opt.value = prop.values[vi];
+          opt.textContent = prop.values[vi];
+          select.appendChild(opt);
+        }
+
+        row.appendChild(select);
+        builder.appendChild(row);
+      }
+
+      var addRow = document.createElement('div');
+      addRow.className = 'filter-add-row';
+      var addSpacer = document.createElement('span');
+      addSpacer.className = 'filter-prop-label';
+      addRow.appendChild(addSpacer);
+      var addBtn = document.createElement('button');
+      addBtn.textContent = '+ Add';
+      addBtn.className = 'filter-add-btn';
+      addBtn.addEventListener('click', addFilterEntry);
+      addRow.appendChild(addBtn);
+      builder.appendChild(addRow);
+
+      container.appendChild(builder);
+
+      // Entries list
+      var entriesList = document.createElement('div');
+      entriesList.className = 'filter-entries';
+      entriesList.id = 'filterEntriesList';
+      container.appendChild(entriesList);
+
+      renderFilterEntries();
+    }
+
+    function addFilterEntry() {
+      var selects = document.querySelectorAll('#filterBuilder .filter-prop-select');
+
+      // Build arrays of values per property (expand "All" to all values)
+      var propNames = [];
+      var propValueLists = [];
+      for (var i = 0; i < selects.length; i++) {
+        var propName = selects[i].getAttribute('data-property');
+        propNames.push(propName);
+        if (selects[i].value === '__all__') {
+          // Find this property's values from currentProperties
+          var vals = [];
+          for (var p = 0; p < currentProperties.length; p++) {
+            if (currentProperties[p].name === propName) {
+              vals = currentProperties[p].values.slice();
+              break;
+            }
+          }
+          propValueLists.push(vals);
+        } else {
+          propValueLists.push([selects[i].value]);
+        }
+      }
+
+      // Cartesian product of all value lists
+      var combos = [{}];
+      for (var pi = 0; pi < propNames.length; pi++) {
+        var nextCombos = [];
+        for (var ci = 0; ci < combos.length; ci++) {
+          for (var vi = 0; vi < propValueLists[pi].length; vi++) {
+            var combo = {};
+            for (var k in combos[ci]) combo[k] = combos[ci][k];
+            combo[propNames[pi]] = propValueLists[pi][vi];
+            nextCombos.push(combo);
+          }
+        }
+        combos = nextCombos;
+      }
+
+      // Add each combo, skipping duplicates
+      var added = 0;
+      for (var c = 0; c < combos.length; c++) {
+        var isDupe = false;
+        for (var e = 0; e < booleanFilterEntries.length; e++) {
+          var existing = booleanFilterEntries[e];
+          var match = true;
+          for (var key in combos[c]) {
+            if (combos[c][key] !== existing[key]) { match = false; break; }
+          }
+          if (match) { isDupe = true; break; }
+        }
+        if (!isDupe) {
+          booleanFilterEntries.push(combos[c]);
+          added++;
+        }
+      }
+
+      if (added > 0) {
+        renderFilterEntries();
+        updateBooleanOptions();
+      }
+    }
+
+    function removeFilterEntry(index) {
+      booleanFilterEntries.splice(index, 1);
+      renderFilterEntries();
+      updateBooleanOptions();
+    }
+
+    function renderFilterEntries() {
+      var list = document.getElementById('filterEntriesList');
+      if (!list) return;
+      list.innerHTML = '';
+
+      if (booleanFilterEntries.length === 0) {
+        var placeholder = document.createElement('div');
+        placeholder.className = 'filter-placeholder';
+        placeholder.textContent = 'All variants (add specific combos to filter)';
+        list.appendChild(placeholder);
+        return;
+      }
+
+      if (booleanFilterEntries.length > 3) {
+        var removeAllBtn = document.createElement('button');
+        removeAllBtn.className = 'filter-remove-all';
+        removeAllBtn.textContent = 'Remove all';
+        removeAllBtn.addEventListener('click', function() {
+          booleanFilterEntries = [];
+          renderFilterEntries();
+          updateBooleanOptions();
+        });
+        list.appendChild(removeAllBtn);
+      }
+
+      for (var i = 0; i < booleanFilterEntries.length; i++) {
+        var entry = booleanFilterEntries[i];
+        var row = document.createElement('div');
+        row.className = 'filter-entry';
+
+        var removeBtn = document.createElement('button');
+        removeBtn.className = 'filter-entry-remove';
+        removeBtn.textContent = '\u00d7';
+        removeBtn.setAttribute('data-index', String(i));
+        removeBtn.addEventListener('click', function() {
+          removeFilterEntry(parseInt(this.getAttribute('data-index'), 10));
+        });
+        row.appendChild(removeBtn);
+
+        var text = document.createElement('span');
+        text.className = 'filter-entry-name';
+        var parts = [];
+        for (var key in entry) {
+          parts.push(entry[key]);
+        }
+        text.textContent = parts.join(', ');
+        row.appendChild(text);
+
+        list.appendChild(row);
+      }
+    }
+
+    function getVariantFilterMode() {
+      var checked = document.querySelector('input[name="variantFilter"]:checked');
+      return checked ? checked.value : 'all';
+    }
+
+    function hasFilterEntries() {
+      return getVariantFilterMode() === 'specific' && booleanFilterEntries.length > 0;
+    }
+
+    function getBooleanScopeData() {
+      if (getVariantFilterMode() === 'all') return null;
+      if (booleanFilterEntries.length === 0) return null;
+
+      var booleans = getEnabledBooleanNames();
+      if (booleans.length === 0) return null;
+
+      var groups = [];
+      var propNameSet = {};
+
+      for (var i = 0; i < booleanFilterEntries.length; i++) {
+        var entry = booleanFilterEntries[i];
+        var values = {};
+        for (var key in entry) {
+          values[key] = entry[key];
+          propNameSet[key] = true;
+        }
+        groups.push({ values: values, booleans: booleans });
+      }
+
+      var allPropNames = [];
+      for (var p in propNameSet) allPropNames.push(p);
+
+      return { properties: allPropNames, groups: groups };
+    }
+
+    function booleanRowCount(mode) {
+      var n = getEnabledBooleanCount();
+      if (n === 0) return 0;
+      if (mode === 'individual') return n;
+      if (mode === 'combined') return n > 1 ? n + 1 : n;
+      return Math.pow(2, n) - 1;
+    }
+
+    function getEnabledNestedNames() {
+      var checks = document.querySelectorAll('#nestedInstancesList input[type="checkbox"]');
+      var names = [];
+      for (var i = 0; i < checks.length; i++) {
+        if (checks[i].checked) names.push(checks[i].value);
+      }
+      return names;
+    }
+
+
+    function buildNestedInstancesList() {
+      var container = document.getElementById('nestedInstancesList');
+      container.innerHTML = '';
+      for (var i = 0; i < currentNestedInfo.length; i++) {
+        var ni = currentNestedInfo[i];
+        var wrapper = document.createElement('div');
+        wrapper.setAttribute('data-nested-name', ni.name);
+
+        var label = document.createElement('label');
+        label.className = 'option';
+        var cb = document.createElement('input');
+        cb.type = 'checkbox';
+        cb.checked = true;
+        cb.value = ni.name;
+        cb.addEventListener('change', function() { updateNestedOptions(); });
+        label.appendChild(cb);
+        label.appendChild(document.createTextNode(ni.name));
+        wrapper.appendChild(label);
+
+        container.appendChild(wrapper);
+      }
+
+    }
+
+    function nestedInstanceCount(mode) {
+      var enabledNames = getEnabledNestedNames();
+      var total = 0;
+      for (var i = 0; i < currentNestedInfo.length; i++) {
+        var ni = currentNestedInfo[i];
+        if (enabledNames.indexOf(ni.name) === -1) continue;
+        var nonDefaultValues = 0;
+        for (var j = 0; j < ni.propertyValues.length; j++) {
+          nonDefaultValues += ni.propertyValues[j] - 1;
+        }
+        if (nonDefaultValues === 0) nonDefaultValues = 1;
+        total += nonDefaultValues;
+      }
+      return total;
+    }
+
+    function updateBooleanOptions() {
+      var sel = document.getElementById('booleanCombination');
+      var labels = {
+        individual: 'Each property',
+        combined: 'Each + all together',
+        all: 'Every combination'
+      };
+      for (var i = 0; i < sel.options.length; i++) {
+        sel.options[i].textContent = labels[sel.options[i].value];
+      }
+      updateBooleanCountSummary();
+      updateCombinedCountSummary();
+    }
+
+    function updateBooleanCountSummary() {
+      var summary = document.getElementById('booleanCountSummary');
+      if (!summary) return;
+      var mode = getDocMode();
+      // In "both" mode, hide — combined count shown at bottom
+      if (mode === 'both') {
+        summary.textContent = '';
+        return;
+      }
+      if (mode === 'base') {
+        summary.textContent = '';
+        return;
+      }
+      if (mode === 'nested') {
+        var nestedMode = document.getElementById('nestedInstancesMode').value;
+        var nestedCount = nestedInstanceCount(nestedMode);
+        summary.textContent = 'Base grid + ' + nestedCount + ' example' + (nestedCount !== 1 ? 's' : '') + ' will be generated';
+        return;
+      }
+      var filtered = hasFilterEntries();
+      var isList = getBooleanDisplayMode() === 'list';
+      var comboMode = document.getElementById('booleanCombination').value;
+      var rows = booleanRowCount(comboMode);
+      var text = '';
+      if (isList) {
+        var exampleCount = filtered ? rows * booleanFilterEntries.length : rows;
+        text = 'Base grid + ' + exampleCount + ' example' + (exampleCount !== 1 ? 's' : '') + ' will be generated';
+      } else {
+        var instances = filtered ? rows * booleanFilterEntries.length * currentVariantCount : rows * currentVariantCount;
+        text = 'Base grid and extended grid with ' + instances + ' example' + (instances !== 1 ? 's' : '') + ' will be generated';
+      }
+      summary.textContent = text;
+    }
+
+    function updateCombinedCountSummary() {
+      var summary = document.getElementById('combinedCountSummary');
+      if (!summary) return;
+      var mode = getDocMode();
+      if (mode !== 'both') {
+        summary.style.display = 'none';
+        return;
+      }
+      summary.style.display = 'block';
+      // Boolean examples
+      var comboMode = document.getElementById('booleanCombination').value;
+      var boolRows = booleanRowCount(comboMode);
+      var filtered = hasFilterEntries();
+      var boolExamples = filtered ? boolRows * booleanFilterEntries.length : boolRows;
+      // Nested instances
+      var nestedMode = document.getElementById('nestedInstancesMode').value;
+      var nestedCount = nestedInstanceCount(nestedMode);
+      var total = boolExamples + nestedCount;
+      summary.textContent = 'Base grid + ' + total + ' example' + (total !== 1 ? 's' : '') + ' will be generated (' + boolExamples + ' boolean + ' + nestedCount + ' nested)';
+    }
+
+    function updateNestedOptions() {
+      var sel = document.getElementById('nestedInstancesMode');
+      var labels = {
+        representative: 'Representative',
+        full: 'Full grid'
+      };
+      for (var i = 0; i < sel.options.length; i++) {
+        sel.options[i].textContent = labels[sel.options[i].value];
+      }
+      updateCombinedCountSummary();
+    }
+
+    // Combination select → update count summary
+    document.getElementById('booleanCombination').addEventListener('change', function() {
+      updateBooleanCountSummary();
+    });
+
+    // Variant filter radio toggle
+    var variantFilterRadios = document.querySelectorAll('input[name="variantFilter"]');
+    for (var vfr = 0; vfr < variantFilterRadios.length; vfr++) {
+      variantFilterRadios[vfr].addEventListener('change', function() {
+        var isSpecific = this.value === 'specific';
+        document.getElementById('booleanScopeChecklist').style.display = isSpecific ? 'block' : 'none';
+        updateBooleanOptions();
+      });
+    }
+
+    document.getElementById('nestedInstancesMode').addEventListener('change', function() {
+      updateCombinedCountSummary();
+    });
+
+
+    // ─── Documentation mode radio logic ─────────────────────────────────
+
+    function getDocMode() {
+      var checked = document.querySelector('input[name="docMode"]:checked');
+      return checked ? checked.value : 'base';
+    }
+
+    function syncDocModeSubOptions() {
+      var mode = getDocMode();
+      var showBool = (mode === 'boolean' || mode === 'both');
+      var showNested = (mode === 'nested' || mode === 'both');
+      var boolSub = document.getElementById('booleanPropsOption');
+      var nestedSub = document.getElementById('nestedInstancesModeOption');
+      boolSub.style.display = showBool ? 'flex' : 'none';
+      nestedSub.style.display = showNested ? 'flex' : 'none';
+      // When "both" mode is selected, move sub-options after the "both" label
+      // so they appear under the selected radio, not under hidden disabled radios
+      var bothLabel = document.querySelector('input[name="docMode"][value="both"]').closest('.doc-mode-option');
+      var boolGroup = document.getElementById('docModeGroupBoolean');
+      var nestedGroup = document.getElementById('docModeGroupNested');
+      if (mode === 'both') {
+        // Move sub-options after the "both" label
+        bothLabel.after(boolSub, nestedSub);
+      } else {
+        // Move sub-options back into their groups
+        boolGroup.querySelector('.doc-mode-option').after(boolSub);
+        nestedGroup.querySelector('.doc-mode-option').after(nestedSub);
+      }
+      // Hide group wrappers only when their radio is disabled (no relevant props)
+      var boolRadio = boolGroup.querySelector('input[name="docMode"]');
+      var nestedRadio = nestedGroup.querySelector('input[name="docMode"]');
+      boolGroup.style.display = boolRadio.disabled ? 'none' : '';
+      nestedGroup.style.display = nestedRadio.disabled ? 'none' : '';
+      // Hide grid display option for "both" mode (not supported)
+      document.getElementById('booleanDisplayWrap').style.display = (mode === 'both') ? 'none' : '';
+      // Show section headings only in "both" mode for clarity
+      document.getElementById('booleanSectionHeading').style.display = (mode === 'both') ? '' : 'none';
+      document.getElementById('nestedSectionHeading').style.display = (mode === 'both') ? '' : 'none';
+      // Show variant filter for non-base modes with enumerated properties
+      // Hide in grid display mode (grid extends the full variant grid, no filtering needed)
+      var isGrid = (mode === 'boolean') && getBooleanDisplayMode() === 'grid';
+      var showFilter = (mode !== 'base') && !isGrid && currentProperties.length > 0;
+      document.getElementById('variantFilterWrap').style.display = showFilter ? '' : 'none';
+      // Show auto layout extras checkbox when property combinations will be generated
+      var hasExtras = showBool || showNested;
+      document.getElementById('autoLayoutExtrasOption').style.display = hasExtras ? '' : 'none';
+      // Update count summaries
+      updateBooleanCountSummary();
+      updateCombinedCountSummary();
+    }
+
+    function updateDocModeBadge(hasBoolProps, hasSwapProps) {
+      var badgeTarget = 'base';
+      if (hasBoolProps && hasSwapProps) badgeTarget = 'both';
+      else if (hasBoolProps) badgeTarget = 'boolean';
+      else if (hasSwapProps) badgeTarget = 'nested';
+      var ids = ['base', 'boolean', 'nested', 'both'];
+      for (var i = 0; i < ids.length; i++) {
+        document.getElementById('badge-' + ids[i]).style.display = (ids[i] === badgeTarget) ? 'inline' : 'none';
+      }
+    }
+
+    function autoSelectDocMode(hasBoolProps, hasSwapProps) {
+      var target = 'base';
+      if (hasBoolProps && hasSwapProps) target = 'both';
+      else if (hasBoolProps) target = 'boolean';
+      else if (hasSwapProps) target = 'nested';
+      var radio = document.querySelector('input[name="docMode"][value="' + target + '"]');
+      if (radio && !radio.disabled) radio.checked = true;
+      else document.querySelector('input[name="docMode"][value="base"]').checked = true;
+      syncDocModeSubOptions();
+    }
+
+    function updateDocModeDisabledStates(hasBoolProps, hasSwapProps) {
+      var boolRadio = document.querySelector('input[name="docMode"][value="boolean"]');
+      var nestedRadio = document.querySelector('input[name="docMode"][value="nested"]');
+      var bothRadio = document.querySelector('input[name="docMode"][value="both"]');
+      boolRadio.disabled = !hasBoolProps;
+      nestedRadio.disabled = !hasSwapProps;
+      bothRadio.disabled = !(hasBoolProps && hasSwapProps);
+      // Hide entire radio group + divider when base is the only option
+      var baseOnly = !hasBoolProps && !hasSwapProps;
+      document.querySelector('.doc-mode-radios').style.display = baseOnly ? 'none' : '';
+      document.getElementById('docModeDivider').style.display = baseOnly ? 'none' : '';
+      // If currently selected radio becomes disabled, fall back to base
+      var current = getDocMode();
+      var currentRadio = document.querySelector('input[name="docMode"][value="' + current + '"]');
+      if (currentRadio && currentRadio.disabled) {
+        document.querySelector('input[name="docMode"][value="base"]').checked = true;
+        syncDocModeSubOptions();
+      }
+    }
+
+    // Radio change handler
+    document.querySelectorAll('input[name="docMode"]').forEach(function(radio) {
+      radio.addEventListener('change', function() {
+        syncDocModeSubOptions();
+      });
+    });
+
+    document.querySelectorAll('input[name="booleanDisplayMode"]').forEach(function(radio) {
+      radio.addEventListener('change', function() {
+        document.getElementById('settings-booleanDisplayMode').value = this.value;
+        settingsSave();
+        syncDocModeSubOptions();
+      });
+    });
+
+    removeBtn.addEventListener('click', function() {
+      if (!hasComponentSet) return;
+      removeBtn.disabled = true;
+      showSpinner('Removing docs...');
+      parent.postMessage({ pluginMessage: { type: 'remove' } }, '*');
+    });
+
+    document.getElementById('removeGus').addEventListener('click', function() {
+      if (!hasComponentSet) return;
+      this.disabled = true;
+      showSpinner('Removing Propstar docs...');
+      parent.postMessage({ pluginMessage: { type: 'removeGusPropstar' } }, '*');
+    });
+
+    document.getElementById('debugMode').addEventListener('change', function(e) {
+      parent.postMessage({ pluginMessage: { type: 'setDebug', debug: e.target.checked } }, '*');
+    });
+
+    // ─── Feature flag toggles ───
+    (function initFeatureFlags() {
+      var flagAutoLayout = document.getElementById('flag-autoLayoutExtras');
+      var flagForceAuto = document.getElementById('flag-forceAutoApply');
+
+      // Load from localStorage
+      try {
+        var savedAL = localStorage.getItem('flag_autoLayoutExtras');
+        if (savedAL === 'true') flagAutoLayout.checked = true;
+        var savedFA = localStorage.getItem('flag_forceAutoApply');
+        if (savedFA !== null) flagForceAuto.checked = savedFA === 'true';
+      } catch(e) {}
+
+      // Sync auto layout checkbox in Autodocs tab
+      function syncAutoLayoutCheckbox() {
+        var cb = document.getElementById('autoLayoutExtras');
+        if (cb) {
+          cb.checked = flagAutoLayout.checked;
+          cb.disabled = flagAutoLayout.checked;
+          var opt = document.getElementById('autoLayoutExtrasOption');
+          if (opt && flagAutoLayout.checked) opt.style.display = '';
+        }
+      }
+      syncAutoLayoutCheckbox();
+
+      // Sync force auto-apply
+      function syncForceAutoApply() {
+        GROUPIFY_FORCE_AUTO_APPLY = flagForceAuto.checked;
+        groupify_autoApplyEnabled = GROUPIFY_FORCE_AUTO_APPLY ? true : groupify_autoApplyEnabled;
+        var cb = document.getElementById('groupify-auto-apply-toggle');
+        if (cb) {
+          cb.checked = groupify_autoApplyEnabled;
+          cb.disabled = GROUPIFY_FORCE_AUTO_APPLY;
+          var lbl = cb.closest('.auto-apply-label');
+          if (lbl) lbl.style.opacity = GROUPIFY_FORCE_AUTO_APPLY ? '0.5' : '1';
+        }
+      }
+      syncForceAutoApply();
+
+      flagAutoLayout.addEventListener('change', function() {
+        try { localStorage.setItem('flag_autoLayoutExtras', flagAutoLayout.checked ? 'true' : 'false'); } catch(e) {}
+        syncAutoLayoutCheckbox();
+      });
+
+      flagForceAuto.addEventListener('change', function() {
+        try { localStorage.setItem('flag_forceAutoApply', flagForceAuto.checked ? 'true' : 'false'); } catch(e) {}
+        syncForceAutoApply();
+      });
+    })();
+
+    document.getElementById('debugGrid').addEventListener('click', function() {
+      if (!hasComponentSet) return;
+      parent.postMessage({ pluginMessage: { type: 'debugGrid' } }, '*');
+    });
+
+    document.getElementById('debugLabels').addEventListener('click', function() {
+      if (!hasComponentSet) return;
+      parent.postMessage({ pluginMessage: { type: 'debugLabels' } }, '*');
+    });
+
+    document.getElementById('debugBooleanGrid').addEventListener('click', function() {
+      if (!hasComponentSet) return;
+      parent.postMessage({ pluginMessage: { type: 'debugBooleanGrid' } }, '*');
+    });
+
+    document.getElementById('debugLogSettings').addEventListener('click', function() {
+      var mode = getDocMode();
+      var resolvedNestedMode = document.getElementById('nestedInstancesMode').value;
+
+      // Build the exact generate payload (what code.js receives)
+      var generatePayload = {
+        showTitle: document.getElementById('showTitle').checked,
+        showDescription: document.getElementById('showDescription').checked,
+        showDocLink: document.getElementById('showDocLink').checked,
+        showGrid: document.getElementById('generateGrid').checked,
+        color: document.getElementById('docColor').value,
+        standaloneDoc: false,
+        showBooleanVisibility: (mode === 'boolean' || mode === 'both'),
+        booleanDisplayMode: getBooleanDisplayMode(),
+        booleanCombination: document.getElementById('booleanCombination').value,
+        booleanImprovedAccuracy: true,
+        enabledBooleanProps: getEnabledBooleanNames(),
+        booleanScope: getBooleanScopeData(),
+        showNestedInstances: (mode === 'nested' || mode === 'both'),
+        nestedInstancesMode: resolvedNestedMode,
+        enabledNestedInstances: getEnabledNestedNames(),
+      };
+
+      // Variant filter entries
+      var scopeState = booleanFilterEntries.slice();
+
+      // Boolean props flat state
+      var boolFlatState = [];
+      var boolChecks = document.querySelectorAll('#booleanPropsList input[type="checkbox"]');
+      for (var bf = 0; bf < boolChecks.length; bf++) {
+        boolFlatState.push({ name: boolChecks[bf].value, checked: boolChecks[bf].checked });
+      }
+
+      // Nested instances state
+      var nestedState = [];
+      var nestedItems = document.querySelectorAll('#nestedInstancesList [data-nested-name]');
+      for (var n = 0; n < nestedItems.length; n++) {
+        var nCb = nestedItems[n].querySelector('input[type="checkbox"]');
+        var nName = nestedItems[n].getAttribute('data-nested-name');
+        var nInfo = null;
+        for (var ni = 0; ni < currentNestedInfo.length; ni++) {
+          if (currentNestedInfo[ni].name === nName) { nInfo = currentNestedInfo[ni]; break; }
+        }
+        nestedState.push({
+          name: nName,
+          checked: nCb ? nCb.checked : false,
+          visible: nestedItems[n].style.display !== 'none',
+          propertyValues: nInfo ? nInfo.propertyValues : [],
+          parentVariants: nInfo ? nInfo.parentVariants : []
+        });
+      }
+
+      var snapshot = {
+        docMode: mode,
+        generatePayload: generatePayload,
+        componentSet: {
+          variantCount: currentVariantCount,
+          properties: currentProperties.map(function(p) { return { name: p.name, values: p.values }; }),
+          booleanProps: currentBooleanPropNames.slice()
+        },
+        uiState: {
+          booleanPropsFlat: boolFlatState,
+          booleanScope: scopeState,
+          nestedInstances: nestedState
+        }
+      };
+      console.log('[Settings Snapshot]', JSON.stringify(snapshot, null, 2));
+      parent.postMessage({ pluginMessage: { type: 'debugLogSettings', snapshot: snapshot } }, '*');
+    });
+
+    document.getElementById('migrateScanBtn').addEventListener('click', function() {
+      var btn = this;
+      btn.disabled = true;
+      btn.dataset.originalText = btn.textContent;
+      btn.innerHTML = '<div class="spinner" style="display:inline-block;vertical-align:middle;margin-right:6px;"></div>Scanning…';
+      parent.postMessage({ pluginMessage: { type: 'scanDocs' } }, '*');
+    });
+
+    // ═══════════════════════════════════════════════════════════
+    // Groupify
+    // ═══════════════════════════════════════════════════════════
+
+    // ═══════════════════════════════════════════════════════════
+    // Navigate
+    // ═══════════════════════════════════════════════════════════
+
+    // Close plugin, keep selection
+    document.getElementById('nav-close-plugin').onclick = function() {
+      parent.postMessage({ pluginMessage: { type: 'close-plugin' } }, '*');
+    };
+
+    // D-pad move handlers
+    document.getElementById('nav-move-up').onclick = function() {
+      parent.postMessage({ pluginMessage: { type: 'nav-move-up' } }, '*');
+    };
+    document.getElementById('nav-move-down').onclick = function() {
+      parent.postMessage({ pluginMessage: { type: 'nav-move-down' } }, '*');
+    };
+    document.getElementById('nav-move-left').onclick = function() {
+      parent.postMessage({ pluginMessage: { type: 'nav-move-left' } }, '*');
+    };
+    document.getElementById('nav-move-right').onclick = function() {
+      parent.postMessage({ pluginMessage: { type: 'nav-move-right' } }, '*');
+    };
+
+    // Expand selection handlers
+    document.getElementById('nav-select-row').onclick = function() {
+      parent.postMessage({ pluginMessage: { type: 'nav-select-row' } }, '*');
+    };
+    document.getElementById('nav-select-column').onclick = function() {
+      parent.postMessage({ pluginMessage: { type: 'nav-select-column' } }, '*');
+    };
+    document.getElementById('nav-add-next-row').onclick = function() {
+      parent.postMessage({ pluginMessage: { type: 'nav-add-next-row' } }, '*');
+    };
+    document.getElementById('nav-add-next-column').onclick = function() {
+      parent.postMessage({ pluginMessage: { type: 'nav-add-next-column' } }, '*');
+    };
+    document.getElementById('nav-add-prev-row').onclick = function() {
+      parent.postMessage({ pluginMessage: { type: 'nav-add-prev-row' } }, '*');
+    };
+    document.getElementById('nav-add-prev-column').onclick = function() {
+      parent.postMessage({ pluginMessage: { type: 'nav-add-prev-column' } }, '*');
+    };
+
+    // Deep variant selector
+    function renderDeepVariantChips(data) {
+      var container = document.getElementById('deep-variant-chips');
+      if (!data || !data.selectedVariantProps || Object.keys(data.selectedVariantProps).length === 0) {
+        container.innerHTML = '<p class="deep-variant-empty">Select a variant inside a component set to see options.</p>';
+        return;
+      }
+      container.innerHTML = '';
+      var props = data.selectedVariantProps;
+      var allValues = data.allPropertyValues || {};
+      var propNames = Object.keys(props);
+      for (var i = 0; i < propNames.length; i++) {
+        (function(propName, currentValue) {
+          var row = document.createElement('div');
+          row.className = 'deep-variant-row';
+
+          var label = document.createElement('span');
+          label.className = 'deep-variant-label';
+          label.textContent = propName;
+          label.title = propName;
+          row.appendChild(label);
+
+          var buttons = document.createElement('div');
+          buttons.className = 'deep-variant-buttons';
+
+          // Extend buttons for all values of this property
+          var values = allValues[propName] || [currentValue];
+          for (var k = 0; k < values.length; k++) {
+            (function(val) {
+              var addBtn = document.createElement('button');
+              addBtn.className = 'dv-add';
+              addBtn.textContent = '+ ' + val;
+              addBtn.onclick = function() {
+                var filters = {};
+                for (var j = 0; j < propNames.length; j++) filters[propNames[j]] = [];
+                filters[propName] = [val];
+                parent.postMessage({ pluginMessage: { type: 'dv-select-variants', filters: filters, extend: true } }, '*');
+              };
+              buttons.appendChild(addBtn);
+            })(values[k]);
+          }
+
+          // Reduce buttons for all values of this property
+          for (var k = 0; k < values.length; k++) {
+            (function(val) {
+              var removeBtn = document.createElement('button');
+              removeBtn.className = 'dv-remove';
+              removeBtn.textContent = '- ' + val;
+              removeBtn.onclick = function() {
+                var filters = {};
+                for (var j = 0; j < propNames.length; j++) filters[propNames[j]] = [];
+                filters[propName] = [val];
+                parent.postMessage({ pluginMessage: { type: 'dv-remove-from-selection', filters: filters } }, '*');
+              };
+              buttons.appendChild(removeBtn);
+            })(values[k]);
+          }
+
+          row.appendChild(buttons);
+          container.appendChild(row);
+        })(propNames[i], props[propNames[i]]);
+      }
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    // Settings
+    // ═══════════════════════════════════════════════════════════
+
+    var settings_spacingPresets = [24, 32, 40];
+
+    function settingsRenderChips() {
+      var container = document.getElementById("settings-spacing-list");
+      container.innerHTML = "";
+      var sorted = settings_spacingPresets.slice().sort(function(a,b){ return a - b; });
+      for (var i = 0; i < sorted.length; i++) {
+        (function(val) {
+          var chip = document.createElement("span");
+          chip.className = "settings-chip";
+          chip.tabIndex = 0;
+          chip.textContent = val;
+          chip.onkeydown = function(e) {
+            if (e.key === 'Backspace' || e.key === 'Delete') {
+              e.preventDefault();
+              var next = chip.nextElementSibling || chip.previousElementSibling;
+              settingsRemoveSpacing(val);
+              if (next && next.classList.contains('settings-chip')) next.focus();
+            }
+          };
+          var btn = document.createElement("button");
+          btn.className = "remove-chip";
+          btn.innerHTML = "&times;";
+          btn.tabIndex = -1;
+          btn.onclick = function() { settingsRemoveSpacing(val); };
+          chip.appendChild(btn);
+          container.appendChild(chip);
+        })(sorted[i]);
+      }
+    }
+
+    function settingsAddSpacing() {
+      var input = document.getElementById("settings-add-spacing");
+      var val = parseInt(input.value, 10);
+      if (isNaN(val) || val < 0) return;
+      if (settings_spacingPresets.indexOf(val) >= 0) { input.value = ""; return; }
+      settings_spacingPresets.push(val);
+      settings_spacingPresets.sort(function(a,b){ return a - b; });
+      input.value = "";
+      settingsRenderChips();
+      settingsSave();
+      groupifyRebuildPaddingPresets();
+    }
+
+    function settingsRemoveSpacing(val) {
+      var idx = settings_spacingPresets.indexOf(val);
+      if (idx >= 0) settings_spacingPresets.splice(idx, 1);
+      settingsRenderChips();
+      settingsSave();
+      groupifyRebuildPaddingPresets();
+    }
+
+    var settings_fontFamily = "Inter";
+    var settings_docLabel = "Obra Autodocs";
+
+    function settingsSave() {
+      parent.postMessage({ pluginMessage: { type: "settings-save", spacingPresets: settings_spacingPresets, colorPresets: settings_colorPresets, fontFamily: settings_fontFamily, docLabel: settings_docLabel, booleanDisplayMode: document.getElementById("settings-booleanDisplayMode").value } }, "*");
+    }
+
+    function getBooleanDisplayMode() {
+      // Force list mode when nested instances are also active (no grid extension)
+      if (getDocMode() === 'both') return 'list';
+      var checked = document.querySelector('input[name="booleanDisplayMode"]:checked');
+      return checked ? checked.value : 'list';
+    }
+
+    function setBooleanDisplayMode(val) {
+      var radio = document.querySelector('input[name="booleanDisplayMode"][value="' + val + '"]');
+      if (radio) radio.checked = true;
+    }
+
+    function settingsSaveBooleanDisplayMode() {
+      var val = document.getElementById("settings-booleanDisplayMode").value;
+      setBooleanDisplayMode(val);
+      settingsSave();
+    }
+
+    function settingsSaveFont() {
+      var input = document.getElementById("settings-font-family");
+      var val = input.value.trim();
+      if (!val) return;
+      settings_fontFamily = val;
+      settingsSave();
+    }
+
+    function settingsSaveDocLabel() {
+      var input = document.getElementById("settings-doc-label");
+      settings_docLabel = input.value.trim() || "Obra Autodocs";
+      settingsSave();
+    }
+
+    // Enter key to add spacing
+    document.getElementById("settings-add-spacing").addEventListener("keydown", function(e) {
+      if (e.key === "Enter") { e.preventDefault(); settingsAddSpacing(); }
+    });
+
+    // Enter key to apply font
+    document.getElementById("settings-font-family").addEventListener("keydown", function(e) {
+      if (e.key === "Enter") { e.preventDefault(); settingsSaveFont(); }
+    });
+
+    // Initial render
+    settingsRenderChips();
+
+    // --- Color presets ---
+
+    function settingsRenderColorChips() {
+      var container = document.getElementById("settings-color-list");
+      container.innerHTML = "";
+      for (var i = 0; i < settings_colorPresets.length; i++) {
+        (function(hex) {
+          var chip = document.createElement("span");
+          chip.className = "settings-chip";
+          chip.tabIndex = 0;
+          chip.onkeydown = function(e) {
+            if (e.key === 'Backspace' || e.key === 'Delete') {
+              e.preventDefault();
+              var next = chip.nextElementSibling || chip.previousElementSibling;
+              settingsRemoveColor(hex);
+              if (next && next.classList.contains('settings-chip')) next.focus();
+            }
+          };
+          var dot = document.createElement("span");
+          dot.className = "settings-color-dot";
+          dot.style.background = hex;
+          chip.appendChild(dot);
+          var label = document.createTextNode(" " + hex);
+          chip.appendChild(label);
+          var btn = document.createElement("button");
+          btn.className = "remove-chip";
+          btn.tabIndex = -1;
+          btn.innerHTML = "&times;";
+          btn.onclick = function() { settingsRemoveColor(hex); };
+          chip.appendChild(btn);
+          container.appendChild(chip);
+        })(settings_colorPresets[i]);
+      }
+    }
+
+    function settingsAddColor() {
+      var input = document.getElementById("settings-add-color");
+      var hex = input.value.toUpperCase();
+      for (var i = 0; i < settings_colorPresets.length; i++) {
+        if (settings_colorPresets[i].toUpperCase() === hex) return;
+      }
+      settings_colorPresets.push(hex);
+      settingsRenderColorChips();
+      settingsSave();
+      buildColorSwatches();
+      buildExistingColorSwatches(document.getElementById('existingColorSwatches')._selectedColor || DEFAULT_COLOR);
+    }
+
+    function settingsRemoveColor(hex) {
+      settings_colorPresets = settings_colorPresets.filter(function(c) { return c.toUpperCase() !== hex.toUpperCase(); });
+      settingsRenderColorChips();
+      settingsSave();
+      buildColorSwatches();
+      buildExistingColorSwatches(document.getElementById('existingColorSwatches')._selectedColor || DEFAULT_COLOR);
+    }
+
+    settingsRenderColorChips();
+
+    // ═══════════════════════════════════════════════════════════
+    // Groupify
+    // ═══════════════════════════════════════════════════════════
+
+    var groupify_nodeId = null;
+    var groupify_propertiesConfig = [];
+    var groupify_sectionDirection = "GRID";
+    var groupify_preferredAxis = null; // 'x', 'y', or null (auto)
+    var groupify_padLocked = true;
+    var GROUPIFY_FORCE_AUTO_APPLY = false; // Controlled via Debug > Feature flags
+    try {
+      var savedForceAuto = localStorage.getItem("flag_forceAutoApply");
+      // Default to true if no saved preference
+      GROUPIFY_FORCE_AUTO_APPLY = savedForceAuto !== null ? savedForceAuto === "true" : true;
+    } catch(e) { GROUPIFY_FORCE_AUTO_APPLY = true; }
+    var groupify_autoApplyEnabled = GROUPIFY_FORCE_AUTO_APPLY ? true : false;
+
+    // Load auto-apply preference from localStorage (unless forced)
+    if (!GROUPIFY_FORCE_AUTO_APPLY) {
+      try {
+        var savedAutoApply = localStorage.getItem("groupify_autoApply");
+        if (savedAutoApply === "true") groupify_autoApplyEnabled = true;
+      } catch(e) {}
+    }
+    (function() {
+      var cb = document.getElementById("groupify-auto-apply-toggle");
+      if (cb) {
+        cb.checked = groupify_autoApplyEnabled;
+        if (GROUPIFY_FORCE_AUTO_APPLY) {
+          cb.disabled = true;
+          cb.closest('.auto-apply-label').style.opacity = '0.5';
+        }
+      }
+    })();
+
+    function groupifyToggleAutoApply(checked) {
+      if (GROUPIFY_FORCE_AUTO_APPLY) return; // Can't toggle when forced
+      groupify_autoApplyEnabled = checked;
+      try { localStorage.setItem("groupify_autoApply", checked ? "true" : "false"); } catch(e) {}
+    }
+
+    function groupifySetPreferredAxis(axis) {
+      groupify_preferredAxis = axis;
+      document.getElementById("axis-auto").className = axis === null ? "active" : "";
+      document.getElementById("axis-x").className = axis === "x" ? "active" : "";
+      document.getElementById("axis-y").className = axis === "y" ? "active" : "";
+      // Re-infer directions with the new preferred axis
+      parent.postMessage({ pluginMessage: { type: "groupify-reinfer", preferredAxis: groupify_preferredAxis } }, "*");
+    }
+
+    // Call this after any UI change to auto-apply if enabled
+    var groupify_initInProgress = false;
+    function groupifyMaybeAutoApply() {
+      if (groupify_autoApplyEnabled && !groupify_initInProgress) groupifyAutoApply();
+    }
+
+    // SVG icon markup
+    var GROUPIFY_SECTION_ICON = '<svg viewBox="0 0 16 16" fill="none"><path d="M12.6667 2.66669H10C9.63184 2.66669 9.33337 2.96517 9.33337 3.33335V6.00002C9.33337 6.36821 9.63184 6.66669 10 6.66669H12.6667C13.0349 6.66669 13.3334 6.36821 13.3334 6.00002V3.33335C13.3334 2.96517 13.0349 2.66669 12.6667 2.66669Z" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M12.6667 9.33331H10C9.63184 9.33331 9.33337 9.63178 9.33337 9.99998V12.6666C9.33337 13.0348 9.63184 13.3333 10 13.3333H12.6667C13.0349 13.3333 13.3334 13.0348 13.3334 12.6666V9.99998C13.3334 9.63178 13.0349 9.33331 12.6667 9.33331Z" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.99996 2.66669H3.33329C2.96511 2.66669 2.66663 2.96517 2.66663 3.33335V6.00002C2.66663 6.36821 2.96511 6.66669 3.33329 6.66669H5.99996C6.36815 6.66669 6.66663 6.36821 6.66663 6.00002V3.33335C6.66663 2.96517 6.36815 2.66669 5.99996 2.66669Z" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.99996 9.33331H3.33329C2.96511 9.33331 2.66663 9.63178 2.66663 9.99998V12.6666C2.66663 13.0348 2.96511 13.3333 3.33329 13.3333H5.99996C6.36815 13.3333 6.66663 13.0348 6.66663 12.6666V9.99998C6.66663 9.63178 6.36815 9.33331 5.99996 9.33331Z" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    var GROUPIFY_ROW_ICON = '<svg viewBox="0 0 16 16" fill="none"><path d="M13.3334 4V2.66667C13.3334 2.29848 13.0349 2 12.6667 2L3.33337 2C2.96519 2 2.66671 2.29848 2.66671 2.66667V4C2.66671 4.36819 2.96519 4.66667 3.33337 4.66667H12.6667C13.0349 4.66667 13.3334 4.36819 13.3334 4Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.3334 13.3333V12C13.3334 11.6318 13.0349 11.3333 12.6667 11.3333H3.33337C2.96519 11.3333 2.66671 11.6318 2.66671 12V13.3333C2.66671 13.7015 2.96519 14 3.33337 14H12.6667C13.0349 14 13.3334 13.7015 13.3334 13.3333Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.3334 8.66669V7.33335C13.3334 6.96516 13.0349 6.66669 12.6667 6.66669L3.33337 6.66669C2.96519 6.66669 2.66671 6.96516 2.66671 7.33335V8.66669C2.66671 9.03488 2.96519 9.33335 3.33337 9.33335H12.6667C13.0349 9.33335 13.3334 9.03488 13.3334 8.66669Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    var GROUPIFY_COL_ICON = '<svg viewBox="0 0 16 16" fill="none"><path d="M12 13.3333L13.3333 13.3333C13.7015 13.3333 14 13.0348 14 12.6666L14 3.33331C14 2.96512 13.7015 2.66665 13.3333 2.66665L12 2.66665C11.6318 2.66665 11.3333 2.96512 11.3333 3.33331L11.3333 12.6666C11.3333 13.0348 11.6318 13.3333 12 13.3333Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.66663 13.3333L3.99996 13.3333C4.36815 13.3333 4.66663 13.0348 4.66663 12.6666L4.66663 3.33331C4.66663 2.96512 4.36815 2.66665 3.99996 2.66665L2.66663 2.66665C2.29844 2.66665 1.99996 2.96512 1.99996 3.33331L1.99996 12.6666C1.99996 13.0348 2.29844 13.3333 2.66663 13.3333Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.33337 13.3333L8.66671 13.3333C9.0349 13.3333 9.33337 13.0348 9.33337 12.6666L9.33337 3.33331C9.33337 2.96512 9.0349 2.66665 8.66671 2.66665L7.33337 2.66665C6.96518 2.66665 6.66671 2.96512 6.66671 3.33331L6.66671 12.6666C6.66671 13.0348 6.96518 13.3333 7.33337 13.3333Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    var GROUPIFY_DRAG_ICON = '<svg width="8" height="14" viewBox="0 0 8 14"><circle cx="2" cy="2" r="1.2" fill="currentColor" opacity="0.5"/><circle cx="6" cy="2" r="1.2" fill="currentColor" opacity="0.5"/><circle cx="2" cy="7" r="1.2" fill="currentColor" opacity="0.5"/><circle cx="6" cy="7" r="1.2" fill="currentColor" opacity="0.5"/><circle cx="2" cy="12" r="1.2" fill="currentColor" opacity="0.5"/><circle cx="6" cy="12" r="1.2" fill="currentColor" opacity="0.5"/></svg>';
+    var GROUPIFY_LOCK_ICON = '<svg viewBox="0 0 16 16" fill="none"><path d="M12 7.33331H4.00004C3.63185 7.33331 3.33337 7.63178 3.33337 7.99998V13.3333C3.33337 13.7015 3.63185 14 4.00004 14H12C12.3682 14 12.6667 13.7015 12.6667 13.3333V7.99998C12.6667 7.63178 12.3682 7.33331 12 7.33331Z" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.6667 4.66667V7.33333H5.33337V4.66667C5.33337 3.2 6.53337 2 8.00004 2C9.46671 2 10.6667 3.2 10.6667 4.66667Z" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    var GROUPIFY_UNLOCK_ICON = '<svg viewBox="0 0 16 16" fill="none"><path d="M12 7.33331H4.00004C3.63185 7.33331 3.33337 7.63178 3.33337 7.99998V13.3333C3.33337 13.7015 3.63185 14 4.00004 14H12C12.3682 14 12.6667 13.7015 12.6667 13.3333V7.99998C12.6667 7.63178 12.3682 7.33331 12 7.33331Z" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.33337 7.33333V4.66667C5.33337 3.2 6.53337 2 8.00004 2C9.46671 2 10.6667 3.2 10.6667 4.66667" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+    // --- Padding presets (dynamic from settings) ---
+    function groupifyRebuildPaddingPresets() {
+      var container = document.getElementById("pad-mode-presets");
+      container.innerHTML = "";
+      var sorted = settings_spacingPresets.slice().sort(function(a,b){ return a - b; });
+      for (var i = 0; i < sorted.length; i++) {
+        (function(val) {
+          var btn = document.createElement("button");
+          btn.className = "preset-btn";
+          btn.textContent = val;
+          btn.onclick = function() { groupifyApplyPaddingPreset(val); };
+          container.appendChild(btn);
+        })(sorted[i]);
+      }
+      var customBtn = document.createElement("button");
+      customBtn.className = "preset-btn" + (groupify_padCustomMode ? " active" : "");
+      customBtn.id = "pad-custom-btn";
+      customBtn.textContent = "Custom";
+      customBtn.onclick = function() { groupifySwitchPadMode("custom"); };
+      container.appendChild(customBtn);
+      groupifyUpdatePresetHighlight();
+    }
+
+    // Initial build
+    groupifyRebuildPaddingPresets();
+
+    // --- Padding mode switching ---
+    var groupify_padCustomMode = false;
+    function groupifySwitchPadMode(mode) {
+      if (mode === "custom") {
+        groupify_padCustomMode = !groupify_padCustomMode;
+      } else {
+        groupify_padCustomMode = false;
+      }
+      document.getElementById("pad-mode-custom").style.display = groupify_padCustomMode ? "block" : "none";
+      var customBtn = document.getElementById("pad-custom-btn");
+      if (customBtn) customBtn.className = "preset-btn" + (groupify_padCustomMode ? " active" : "");
+    }
+
+    // --- Padding lock ---
+    function groupifyTogglePadLock() {
+      groupify_padLocked = !groupify_padLocked;
+      var btn = document.getElementById("pad-lock");
+      btn.innerHTML = groupify_padLocked ? GROUPIFY_LOCK_ICON : GROUPIFY_UNLOCK_ICON;
+      btn.className = "lock-btn" + (groupify_padLocked ? " active" : "");
+      btn.setAttribute("data-tooltip", groupify_padLocked ? "Unlock" : "Lock to first value");
+      if (groupify_padLocked) {
+        var val = document.getElementById("pad-top").value;
+        document.getElementById("pad-right").value = val;
+        document.getElementById("pad-bottom").value = val;
+        document.getElementById("pad-left").value = val;
+      }
+      groupifyUpdatePresetHighlight();
+      groupifyMaybeAutoApply();
+    }
+
+    function groupifyOnPaddingInput(el) {
+      if (groupify_padLocked) {
+        var val = el.value;
+        document.getElementById("pad-top").value = val;
+        document.getElementById("pad-right").value = val;
+        document.getElementById("pad-bottom").value = val;
+        document.getElementById("pad-left").value = val;
+      }
+      groupifyUpdatePresetHighlight();
+      groupifyMaybeAutoApply();
+    }
+
+    function groupifyApplyPaddingPreset(val) {
+      document.getElementById("pad-top").value = val;
+      document.getElementById("pad-right").value = val;
+      document.getElementById("pad-bottom").value = val;
+      document.getElementById("pad-left").value = val;
+      groupify_padLocked = true;
+      var btn = document.getElementById("pad-lock");
+      btn.innerHTML = GROUPIFY_LOCK_ICON;
+      btn.className = "lock-btn active";
+      btn.setAttribute("data-tooltip", "Unlock");
+      groupifyUpdatePresetHighlight();
+      groupifyMaybeAutoApply();
+    }
+
+    function groupifyUpdatePresetHighlight() {
+      var t = parseInt(document.getElementById("pad-top").value, 10) || 0;
+      var r = parseInt(document.getElementById("pad-right").value, 10) || 0;
+      var b = parseInt(document.getElementById("pad-bottom").value, 10) || 0;
+      var l = parseInt(document.getElementById("pad-left").value, 10) || 0;
+      var allEqual = (t === r && r === b && b === l);
+      var btns = document.querySelectorAll("#pad-mode-presets .preset-btn");
+      var hasMatch = false;
+      for (var i = 0; i < btns.length; i++) {
+        if (btns[i].id === "pad-custom-btn") continue; // skip the Custom button
+        var presetVal = parseInt(btns[i].textContent, 10);
+        var isActive = allEqual && t === presetVal;
+        btns[i].className = "preset-btn" + (isActive ? " active" : "");
+        if (isActive) hasMatch = true;
+      }
+      // Auto-switch to custom mode when values don't match any preset
+      var customBtn = document.getElementById("pad-custom-btn");
+      if (!allEqual || !hasMatch) {
+        groupify_padCustomMode = true;
+        document.getElementById("pad-mode-custom").style.display = "block";
+        if (customBtn) customBtn.className = "preset-btn active";
+      } else {
+        groupify_padCustomMode = false;
+        document.getElementById("pad-mode-custom").style.display = "none";
+        if (customBtn) customBtn.className = "preset-btn";
+      }
+    }
+
+    // --- Section direction ---
+    function groupifySetSectionDirection(dir) {
+      groupify_sectionDirection = dir;
+      document.getElementById("sec-dir-h").className = "dir-btn" + (dir === "HORIZONTAL" ? " active" : "");
+      document.getElementById("sec-dir-v").className = "dir-btn" + (dir === "VERTICAL" ? " active" : "");
+      document.getElementById("sec-dir-grid").className = "dir-btn" + (dir === "GRID" ? " active" : "");
+      groupifyMaybeAutoApply();
+    }
+
+    function groupifyUpdateSectionControls() {
+      var sectionCount = 0;
+      for (var i = 0; i < groupify_propertiesConfig.length; i++) {
+        if (groupify_propertiesConfig[i].direction === "SECTION") sectionCount++;
+      }
+      document.getElementById("groupify-section-controls").style.display = sectionCount > 0 ? "block" : "none";
+      document.getElementById("sec-dir-grid").style.display = sectionCount >= 2 ? "flex" : "none";
+      if (sectionCount < 2 && groupify_sectionDirection === "GRID") {
+        groupifySetSectionDirection("HORIZONTAL");
+      }
+      document.getElementById("sec-dir-h").className = "dir-btn" + (groupify_sectionDirection === "HORIZONTAL" ? " active" : "");
+      document.getElementById("sec-dir-v").className = "dir-btn" + (groupify_sectionDirection === "VERTICAL" ? " active" : "");
+      document.getElementById("sec-dir-grid").className = "dir-btn" + (groupify_sectionDirection === "GRID" ? " active" : "");
+    }
+
+    // --- Build property section UI ---
+    function groupifyBuildPropertyUI(prop, index) {
+      var container = document.getElementById("groupify-properties-container");
+
+      var section = document.createElement("div");
+      section.className = "property-section";
+      section.setAttribute("data-index", index);
+
+      var hr = document.createElement("hr");
+      hr.className = "g-divider";
+      section.appendChild(hr);
+
+      var header = document.createElement("div");
+      header.className = "property-header";
+
+      var leftSide = document.createElement("div");
+      leftSide.style.cssText = "display:flex;align-items:center;min-width:0;flex:1;";
+
+      var arrows = document.createElement("span");
+      arrows.className = "property-reorder-arrows";
+      var upBtn = document.createElement("button");
+      upBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 9.33331L8 5.33331L12 9.33331" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      upBtn.disabled = (index === 0);
+      var downBtn = document.createElement("button");
+      downBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M12 6.66669L8 10.6667L4 6.66669" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      downBtn.disabled = (index === groupify_propertiesConfig.length - 1);
+      (function(idx) {
+        upBtn.onclick = function() { groupifyMoveProperty(idx, -1); };
+        downBtn.onclick = function() { groupifyMoveProperty(idx, 1); };
+      })(index);
+      arrows.appendChild(upBtn);
+      arrows.appendChild(downBtn);
+      leftSide.appendChild(arrows);
+
+      var nameEl = document.createElement("span");
+      nameEl.className = "property-name";
+      nameEl.textContent = prop.name;
+      leftSide.appendChild(nameEl);
+
+      header.appendChild(leftSide);
+
+      var controls = document.createElement("div");
+      controls.className = "property-controls";
+
+      var secBtn = document.createElement("button");
+      secBtn.className = "dir-btn" + (prop.direction === "SECTION" ? " active" : "");
+      secBtn.innerHTML = GROUPIFY_SECTION_ICON;
+      secBtn.setAttribute("data-tooltip", "Section");
+
+      var rowBtn = document.createElement("button");
+      rowBtn.className = "dir-btn" + (prop.direction === "ROW" ? " active" : "");
+      rowBtn.innerHTML = GROUPIFY_ROW_ICON;
+      rowBtn.setAttribute("data-tooltip", "Row");
+
+      var colBtn = document.createElement("button");
+      colBtn.className = "dir-btn" + (prop.direction === "COLUMN" ? " active" : "");
+      colBtn.innerHTML = GROUPIFY_COL_ICON;
+      colBtn.setAttribute("data-tooltip", "Column");
+
+      (function (idx, sb, rb, cb) {
+        function activate(dir) {
+          groupify_propertiesConfig[idx].direction = dir;
+          if (dir === "SECTION" && groupify_propertiesConfig[idx].spacing === 48) {
+            groupify_propertiesConfig[idx].spacing = 64;
+          } else if (dir !== "SECTION" && groupify_propertiesConfig[idx].spacing === 64) {
+            groupify_propertiesConfig[idx].spacing = 48;
+          }
+          sb.className = "dir-btn" + (dir === "SECTION" ? " active" : "");
+          rb.className = "dir-btn" + (dir === "ROW" ? " active" : "");
+          cb.className = "dir-btn" + (dir === "COLUMN" ? " active" : "");
+          // Update spacing preset highlight
+          var sec = sb.closest(".property-section");
+          var presetBtns = sec.querySelectorAll(".spacing-presets .preset-btn");
+          var sp = groupify_propertiesConfig[idx].spacing;
+          var matched = false;
+          for (var b = 0; b < presetBtns.length; b++) {
+            var pv = parseInt(presetBtns[b].textContent, 10);
+            var isMatch = !isNaN(pv) && pv === sp;
+            presetBtns[b].className = "preset-btn" + (isMatch ? " active" : "");
+            if (isMatch) matched = true;
+          }
+          // Handle custom state
+          var customBtn = presetBtns[presetBtns.length - 1]; // Custom is last
+          if (!matched) {
+            customBtn.className = "preset-btn active custom-active";
+            customBtn.textContent = "";
+            var inp = document.createElement("input");
+            inp.type = "number";
+            inp.min = "0";
+            inp.value = sp;
+            inp.oninput = function() {
+              var v = this.value === '' || this.value === '0' ? 0 : parseInt(this.value, 10);
+              if (!isNaN(v) && v >= 0) {
+                groupify_propertiesConfig[idx].spacing = v;
+                groupifyMaybeAutoApply();
+              }
+            };
+            customBtn.appendChild(inp);
+          } else {
+            customBtn.className = "preset-btn";
+            customBtn.textContent = "Custom";
+          }
+          groupifyUpdateSectionControls();
+          groupifyMaybeAutoApply();
+        }
+        sb.onclick = function () { activate("SECTION"); };
+        rb.onclick = function () { activate("ROW"); };
+        cb.onclick = function () { activate("COLUMN"); };
+      })(index, secBtn, rowBtn, colBtn);
+
+      if (groupify_propertiesConfig.length >= 3) {
+        controls.appendChild(secBtn);
+      }
+      controls.appendChild(rowBtn);
+      controls.appendChild(colBtn);
+
+      header.appendChild(controls);
+      section.appendChild(header);
+
+      // Spacing presets row
+      var spacingPresets = document.createElement("div");
+      spacingPresets.className = "spacing-presets";
+      var presetValues = settings_spacingPresets.slice().sort(function(a,b){ return a - b; });
+      var hasPresetMatch = false;
+      for (var p = 0; p < presetValues.length; p++) {
+        if (presetValues[p] === prop.spacing) hasPresetMatch = true;
+        (function(idx, val) {
+          var btn = document.createElement("button");
+          btn.className = "preset-btn" + (prop.spacing === val ? " active" : "");
+          btn.textContent = val;
+          btn.onclick = function() {
+            groupify_propertiesConfig[idx].spacing = val;
+            var sec = this.closest(".property-section");
+            var btns = sec.querySelectorAll(".spacing-presets .preset-btn");
+            for (var b = 0; b < btns.length; b++) {
+              if (btns[b].classList.contains("custom-active")) {
+                btns[b].className = "preset-btn";
+                btns[b].textContent = "Custom";
+              } else {
+                btns[b].className = "preset-btn";
+              }
+            }
+            this.className = "preset-btn active";
+            groupifyMaybeAutoApply();
+          };
+          spacingPresets.appendChild(btn);
+        })(index, presetValues[p]);
+      }
+      // Custom button with inline editable input
+      (function(idx) {
+        var customBtn = document.createElement("button");
+        customBtn.className = "preset-btn" + (!hasPresetMatch ? " active custom-active" : "");
+        var input = document.createElement("input");
+        input.type = "number";
+        input.min = "0";
+        input.value = !hasPresetMatch ? prop.spacing : "";
+        input.oninput = function() {
+          var val = this.value === '' || this.value === '0' ? 0 : parseInt(this.value, 10);
+          if (!isNaN(val) && val >= 0) {
+            groupify_propertiesConfig[idx].spacing = val;
+            groupifyMaybeAutoApply();
+          }
+        };
+        if (!hasPresetMatch) {
+          customBtn.appendChild(input);
+        } else {
+          customBtn.textContent = "Custom";
+        }
+        customBtn.onclick = function(e) {
+          if (e.target === input) return; // don't re-trigger on input clicks
+          var sec = this.closest(".property-section");
+          var btns = sec.querySelectorAll(".spacing-presets .preset-btn");
+          for (var b = 0; b < btns.length; b++) {
+            btns[b].className = "preset-btn";
+            // Clear inline inputs from other custom btns if reverting
+          }
+          this.className = "preset-btn active custom-active";
+          this.textContent = "";
+          input.value = groupify_propertiesConfig[idx].spacing;
+          this.appendChild(input);
+          input.focus();
+          input.select();
+        };
+        spacingPresets.appendChild(customBtn);
+      })(index);
+      section.appendChild(spacingPresets);
+
+      var list = document.createElement("ul");
+      list.className = "value-list";
+
+      for (var i = 0; i < prop.values.length; i++) {
+        var item = document.createElement("li");
+        item.className = "value-item";
+        item.draggable = true;
+        item.setAttribute("data-value", prop.values[i]);
+
+        var handle = document.createElement("span");
+        handle.className = "drag-handle";
+        handle.innerHTML = GROUPIFY_DRAG_ICON;
+        item.appendChild(handle);
+
+        var label = document.createTextNode(prop.values[i]);
+        item.appendChild(label);
+
+        list.appendChild(item);
+      }
+
+      groupifySetupDragList(list, index);
+      section.appendChild(list);
+
+      container.appendChild(section);
+    }
+
+    // --- Drag-and-drop reordering for value items ---
+    function groupifySetupDragList(list, propIndex) {
+      var dragEl = null;
+
+      list.addEventListener("dragstart", function (e) {
+        if (!e.target.classList.contains("value-item")) return;
+        dragEl = e.target;
+        dragEl.classList.add("dragging");
+        e.dataTransfer.effectAllowed = "move";
+        e.stopPropagation();
+      });
+
+      list.addEventListener("dragend", function () {
+        if (!dragEl) return;
+        dragEl.classList.remove("dragging");
+        groupifyClearIndicators(list);
+        groupifySyncValues(list, propIndex);
+        dragEl = null;
+      });
+
+      list.addEventListener("dragover", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var target = e.target.closest(".value-item");
+        if (!target || target === dragEl) return;
+        groupifyClearIndicators(list);
+        var rect = target.getBoundingClientRect();
+        if (e.clientY < rect.top + rect.height / 2) {
+          target.classList.add("drag-over-top");
+        } else {
+          target.classList.add("drag-over-bottom");
+        }
+      });
+
+      list.addEventListener("drop", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var target = e.target.closest(".value-item");
+        if (!target || !dragEl || target === dragEl) return;
+        var rect = target.getBoundingClientRect();
+        if (e.clientY < rect.top + rect.height / 2) {
+          list.insertBefore(dragEl, target);
+        } else {
+          list.insertBefore(dragEl, target.nextSibling);
+        }
+        groupifyClearIndicators(list);
+      });
+    }
+
+    function groupifyClearIndicators(list) {
+      var items = list.querySelectorAll(".value-item");
+      for (var i = 0; i < items.length; i++) {
+        items[i].classList.remove("drag-over-top", "drag-over-bottom");
+      }
+    }
+
+    function groupifySyncValues(list, propIndex) {
+      var newValues = [];
+      var items = list.querySelectorAll(".value-item");
+      for (var i = 0; i < items.length; i++) {
+        newValues.push(items[i].getAttribute("data-value"));
+      }
+      groupify_propertiesConfig[propIndex].values = newValues;
+      groupifyMaybeAutoApply();
+    }
+
+    // --- Arrow-button reordering for property sections ---
+    function groupifyMoveProperty(index, delta) {
+      var target = index + delta;
+      if (target < 0 || target >= groupify_propertiesConfig.length) return;
+      var tmp = groupify_propertiesConfig[index];
+      groupify_propertiesConfig[index] = groupify_propertiesConfig[target];
+      groupify_propertiesConfig[target] = tmp;
+      groupifyRebuildPropertyUI();
+      document.getElementById("groupify-reorder-notice").style.display = "flex";
+      groupifyAutoApply();
+    }
+
+    function groupifyRebuildPropertyUI() {
+      var container = document.getElementById("groupify-properties-container");
+      container.innerHTML = "";
+      for (var i = 0; i < groupify_propertiesConfig.length; i++) {
+        groupifyBuildPropertyUI(groupify_propertiesConfig[i], i);
+      }
+      var hr = document.createElement("hr");
+      hr.className = "g-divider";
+      container.appendChild(hr);
+    }
+
+    // --- Apply layout ---
+    function groupifyQuickAlign() {
+      if (!groupify_nodeId) return;
+      // Send to plugin: re-infer with preferred axis, apply with 40px spacing/padding
+      parent.postMessage({ pluginMessage: {
+        type: "groupify-quick-align",
+        nodeId: groupify_nodeId,
+        preferredAxis: groupify_preferredAxis,
+        spacing: 40
+      } }, "*");
+    }
+
+    function groupifyAutoApply() {
+      if (!groupify_nodeId) return;
+      var config = {
+        nodeId: groupify_nodeId,
+        sectionDirection: groupify_sectionDirection,
+        padding: {
+          top: parseInt(document.getElementById("pad-top").value, 10) || 0,
+          right: parseInt(document.getElementById("pad-right").value, 10) || 0,
+          bottom: parseInt(document.getElementById("pad-bottom").value, 10) || 0,
+          left: parseInt(document.getElementById("pad-left").value, 10) || 0
+        },
+        properties: []
+      };
+      for (var i = 0; i < groupify_propertiesConfig.length; i++) {
+        config.properties.push({
+          name: groupify_propertiesConfig[i].name,
+          direction: groupify_propertiesConfig[i].direction,
+          spacing: groupify_propertiesConfig[i].spacing,
+          values: groupify_propertiesConfig[i].values
+        });
+      }
+      parent.postMessage({ pluginMessage: { type: "groupify-apply", config: config } }, "*");
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    // Unified message handler
+    // ═══════════════════════════════════════════════════════════
+
+    window.onmessage = function(event) {
+      var msg = event.data.pluginMessage;
+      if (!msg) return;
+
+      // --- Autodocs messages ---
+
+      if (msg.type === 'selection') {
+        var hasGus = msg.hasGusPropstar || false;
+
+        if (msg.componentSet) {
+          hasComponentSet = true;
+          document.getElementById('autodocs-empty-state').style.display = 'none';
+          isStandalone = msg.isStandalone || false;
+          hasWrapper = msg.hasWrapper || false;
+          var hasStandaloneWrapper = msg.hasStandaloneWrapper || false;
+          hasOverflow = msg.hasOverflow || false;
+          document.getElementById('groupify-overflow-warning').style.display = hasOverflow ? 'block' : 'none';
+
+
+
+          // Buttons
+          generateBtn.disabled = hasGus;
+          removeBtn.disabled = !hasWrapper;
+          moreBtn.disabled = hasGus;
+          quickAlignBtn.disabled = hasGus || hasOverflow;
+
+          // Grid options: disabled for standalone components
+          document.getElementById('generateGrid').disabled = isStandalone;
+          if (isStandalone) document.getElementById('generateGrid').checked = false;
+          document.getElementById('toggleGrid').disabled = !hasWrapper || isStandalone;
+          document.getElementById('toggleGrid').checked = (!isStandalone && msg.hasGrid) || false;
+
+          // Grid warning
+          var gridWarningEl = document.getElementById('gridWarning');
+          if (msg.gridWarning) {
+            document.getElementById('gridWarningDetail').textContent = msg.gridWarning + '. ';
+            gridWarningEl.style.display = 'flex';
+          } else {
+            gridWarningEl.style.display = 'none';
+          }
+
+          // Single-type grid info
+          allowSpanning = false;
+          document.getElementById('enableSpanning').checked = false;
+          document.getElementById('singleTypeGridInfo').style.display = msg.isSingleTypeGrid ? 'flex' : 'none';
+
+          // Documentation mode: boolean + nested detection
+          var hasBoolProps = msg.hasBooleanProps || false;
+          currentBooleanPropNames = msg.booleanPropNames || [];
+          currentVariantCount = msg.variantCount || 0;
+          currentProperties = msg.properties || [];
+          var hasSwapProps = msg.hasNestedInstances || false;
+          currentNestedInfo = msg.nestedInstancesInfo || [];
+
+          // Update radio disabled states, badge, and auto-select best mode
+          updateDocModeDisabledStates(hasBoolProps, hasSwapProps);
+          updateDocModeBadge(hasBoolProps, hasSwapProps);
+          autoSelectDocMode(hasBoolProps, hasSwapProps);
+
+          // Build boolean sub-options
+          var allRadio = document.querySelector('input[name="variantFilter"][value="all"]');
+          if (allRadio) allRadio.checked = true;
+          document.getElementById('booleanScopeChecklist').style.display = 'none';
+          buildBooleanScopeChecklist();
+          document.getElementById('booleanPropsFlat').style.display = 'block';
+          buildBooleanPropsList();
+          updateBooleanOptions();
+
+          // Build nested sub-options
+          buildNestedInstancesList();
+          updateNestedOptions();
+
+          // Variable modes
+          updateVariableModesUI(msg.variableCollections || []);
+
+          // Shadcn style filter
+          updateShadcnStyleUI(msg.shadcnStyleInfo || null);
+
+          // Restore per-component settings (if previously generated)
+          if (msg.savedSettings) {
+            restoreComponentSettings(msg.savedSettings);
+          }
+
+          // Existing doc metadata (read-only)
+          updateExistingDocMeta(msg.existingDocMeta);
+
+          // Propstar/Gus docs
+          document.getElementById('gusSection').style.display = hasGus ? 'block' : 'none';
+          document.getElementById('removeGus').disabled = false;
+
+
+          // Status banner and section visibility
+          var bannerLabel = isStandalone ? 'Standalone component selected.' : 'Component set selected.';
+          var bannerLabelExisting = isStandalone ? 'Existing standalone docs detected.' : 'Existing component set detected.';
+          if (hasGus) {
+            hideBanner();
+            document.getElementById('generateSection').style.display = 'none';
+          } else if (hasWrapper) {
+            showBanner('existing', bannerLabelExisting);
+            document.getElementById('generateSection').style.display = 'flex';
+            showExistingState();
+          } else {
+            showBanner('success', bannerLabel);
+            document.getElementById('generateSection').style.display = 'flex';
+            showGenerateState();
+          }
+
+        } else {
+          // No component set selected
+          hasComponentSet = false;
+          isStandalone = false;
+          hasWrapper = false;
+          hasOverflow = false;
+          document.getElementById('groupify-overflow-warning').style.display = 'none';
+          generateBtn.disabled = true;
+          removeBtn.disabled = true;
+          moreBtn.disabled = true;
+          quickAlignBtn.disabled = true;
+          document.getElementById('generateGrid').disabled = false;
+          document.getElementById('generateGrid').checked = true;
+          document.getElementById('toggleGrid').disabled = true;
+          document.getElementById('toggleGrid').checked = false;
+          // Reset doc mode radios
+          document.querySelector('input[name="docMode"][value="base"]').checked = true;
+          updateDocModeDisabledStates(false, false);
+          updateDocModeBadge(false, false);
+          syncDocModeSubOptions();
+          // Reset boolean sub-options
+          document.getElementById('booleanPropsList').innerHTML = '';
+          document.getElementById('booleanScopeChecklist').innerHTML = '';
+          document.getElementById('booleanScopeChecklist').style.display = 'none';
+          document.getElementById('variantFilterWrap').style.display = 'none';
+          booleanFilterEntries = [];
+          var allRadio = document.querySelector('input[name="variantFilter"][value="all"]');
+          if (allRadio) allRadio.checked = true;
+          document.getElementById('booleanPropsFlat').style.display = 'block';
+          currentProperties = [];
+          // Reset nested sub-options
+          document.getElementById('nestedInstancesList').innerHTML = '';
+          currentBooleanPropNames = [];
+          currentVariantCount = 0;
+          currentNestedInfo = [];
+
+          document.getElementById('autodocs-empty-state').style.display = 'flex';
+          hideBanner();
+          document.getElementById('gridWarning').style.display = 'none';
+          document.getElementById('singleTypeGridInfo').style.display = 'none';
+          document.getElementById('gusSection').style.display = 'none';
+          document.getElementById('generateSection').style.display = 'none';
+          updateShadcnStyleUI(null);
+        }
+        hideSpinner('', '');
+      }
+
+      if (msg.type === 'status') {
+        showSpinner(msg.message);
+      }
+
+      if (msg.type === 'done') {
+        generateBtn.disabled = false;
+        moreBtn.disabled = false;
+        hideSpinner(msg.message || 'Done!', 'success');
+        if (msg.message === 'GusPropstar docs removed.') {
+          document.getElementById('gusSection').style.display = 'none';
+          // Show generate state after removing Gus docs
+          showBanner('success', isStandalone ? 'Standalone component selected.' : 'Component set selected.');
+          document.getElementById('generateSection').style.display = 'flex';
+          showGenerateState();
+        }
+        if (msg.message === 'Docs removed.') {
+          // Switch back to generate state after removing docs
+          hasWrapper = false;
+          showBanner('success', isStandalone ? 'Standalone component selected.' : 'Component set selected.');
+          showGenerateState();
+          removeBtn.disabled = true;
+        }
+        if (msg.message !== 'Docs removed.' && msg.message !== 'GusPropstar docs removed.') {
+          // Generation succeeded — switch to existing state
+          hasWrapper = true;
+          showBanner('existing', isStandalone ? 'Existing standalone docs detected.' : 'Existing component set detected.');
+          showExistingState();
+          removeBtn.disabled = false;
+          document.getElementById('toggleGrid').disabled = false;
+          var usedColor = document.getElementById('docColor').value;
+          buildExistingColorSwatches(usedColor);
+        }
+      }
+
+      if (msg.type === 'error') {
+        generateBtn.disabled = false;
+        moreBtn.disabled = false;
+        hideSpinner(msg.message, 'error');
+      }
+
+      // --- Deep variant selector ---
+      if (msg.type === 'deep-variant-info') {
+        renderDeepVariantChips(msg);
+      }
+
+      // --- Groupify messages ---
+
+      // --- Settings messages ---
+
+      if (msg.type === "settings-init") {
+        if (msg.spacingPresets && msg.spacingPresets.length > 0) {
+          settings_spacingPresets = msg.spacingPresets.slice();
+          settingsRenderChips();
+          groupifyRebuildPaddingPresets();
+        }
+        if (msg.colorPresets && msg.colorPresets.length > 0) {
+          settings_colorPresets = msg.colorPresets.map(function(c) { return c.toUpperCase(); });
+          settingsRenderColorChips();
+          buildColorSwatches();
+          buildExistingColorSwatches(DEFAULT_COLOR);
+        }
+        if (msg.fontFamily) {
+          settings_fontFamily = msg.fontFamily;
+          document.getElementById("settings-font-family").value = msg.fontFamily;
+        }
+        if (msg.docLabel) {
+          settings_docLabel = msg.docLabel;
+          document.getElementById("settings-doc-label").value = msg.docLabel;
+        }
+        if (msg.booleanDisplayMode) {
+          setBooleanDisplayMode(msg.booleanDisplayMode);
+          document.getElementById("settings-booleanDisplayMode").value = msg.booleanDisplayMode;
+        }
+      }
+
+      if (msg.type === "variable-mode-prefs-init") {
+        _savedVariableModePrefs = msg.prefs || null;
+      }
+
+      // --- Groupify messages ---
+
+      if (msg.type === "groupify-init") {
+        groupify_initInProgress = true;
+        groupify_nodeId = msg.data.nodeId;
+        quickAlignBtn.disabled = false;
+        document.getElementById("groupify-empty-state").style.display = "none";
+        var content = document.getElementById("groupify-content");
+        content.style.display = "flex";
+
+        var props = msg.data.properties;
+        var numProps = props.length;
+        var inf = msg.data.inferred;
+
+        groupify_propertiesConfig = [];
+
+        if (inf && inf.properties && inf.properties.length > 0) {
+          var infMap = {};
+          for (var i = 0; i < inf.properties.length; i++) {
+            infMap[inf.properties[i].name] = inf.properties[i];
+          }
+
+          for (var i = 0; i < numProps; i++) {
+            var ip = infMap[props[i].name];
+            if (ip) {
+              groupify_propertiesConfig.push({
+                name: ip.name,
+                values: ip.values.slice(),
+                direction: ip.direction || "COLUMN",
+                spacing: ip.spacing != null ? ip.spacing : 48
+              });
+            } else {
+              groupify_propertiesConfig.push({
+                name: props[i].name,
+                values: props[i].values.slice(),
+                direction: "COLUMN",
+                spacing: 48
+              });
+            }
+          }
+
+          groupify_sectionDirection = inf.sectionDirection || "GRID";
+
+          if (inf.padding) {
+            document.getElementById("pad-top").value = inf.padding.top;
+            document.getElementById("pad-right").value = inf.padding.right;
+            document.getElementById("pad-bottom").value = inf.padding.bottom;
+            document.getElementById("pad-left").value = inf.padding.left;
+            if (inf.padding.top === inf.padding.right &&
+                inf.padding.right === inf.padding.bottom &&
+                inf.padding.bottom === inf.padding.left) {
+              groupify_padLocked = true;
+            } else {
+              groupify_padLocked = false;
+            }
+            var lockBtn = document.getElementById("pad-lock");
+            lockBtn.innerHTML = groupify_padLocked ? GROUPIFY_LOCK_ICON : GROUPIFY_UNLOCK_ICON;
+            lockBtn.className = "lock-btn" + (groupify_padLocked ? " active" : "");
+            lockBtn.setAttribute("data-tooltip", groupify_padLocked ? "Unlock" : "Lock to first value");
+          }
+        } else {
+          for (var i = 0; i < numProps; i++) {
+            groupify_propertiesConfig.push({
+              name: props[i].name,
+              values: props[i].values.slice(),
+              direction: i === 0 ? "ROW" : "COLUMN",
+              spacing: 48
+            });
+          }
+          groupify_sectionDirection = "GRID";
+        }
+
+        document.getElementById("groupify-reorder-notice").style.display = "none";
+
+        var container = document.getElementById("groupify-properties-container");
+        container.innerHTML = "";
+        for (var i = 0; i < groupify_propertiesConfig.length; i++) {
+          groupifyBuildPropertyUI(groupify_propertiesConfig[i], i);
+        }
+
+        var hr = document.createElement("hr");
+        hr.className = "g-divider";
+        container.appendChild(hr);
+
+        groupifyUpdateSectionControls();
+        groupifyUpdatePresetHighlight();
+        document.getElementById("axis-auto").className = groupify_preferredAxis === null ? "active" : "";
+        document.getElementById("axis-x").className = groupify_preferredAxis === "x" ? "active" : "";
+        document.getElementById("axis-y").className = groupify_preferredAxis === "y" ? "active" : "";
+        document.getElementById("groupify-apply").disabled = hasOverflow;
+        document.getElementById("groupify-quick-align").disabled = hasOverflow;
+        groupify_initInProgress = false;
+      }
+
+      if (msg.type === "groupify-error") {
+        groupify_nodeId = null;
+        quickAlignBtn.disabled = !hasComponentSet;
+        document.getElementById("groupify-empty-state").style.display = "flex";
+        document.getElementById("groupify-content").style.display = "none";
+        document.getElementById("groupify-apply").disabled = true;
+        document.getElementById("groupify-quick-align").disabled = true;
+        var gStatus = document.getElementById("groupify-status");
+        gStatus.className = "";
+        gStatus.style.display = "none";
+      }
+
+      if (msg.type === "groupify-success") {
+        var gStatus = document.getElementById("groupify-status");
+        gStatus.className = "success";
+        gStatus.textContent = msg.message;
+        setTimeout(function () { gStatus.className = ""; gStatus.style.display = "none"; }, 3000);
+      }
+
+      if (msg.type === 'scanDocsResults') {
+        var el = document.getElementById('migrateScanResults');
+        var results = msg.results;
+        window._scanResults = results;
+        if (results.length === 0) {
+          el.innerHTML = '<div class="migrate-success"><svg viewBox="0 0 16 16" fill="none"><path d="M8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14Z" stroke="currentColor" stroke-miterlimit="10"/><path d="M5.33337 8.33331L7.11117 10.3333L10.6667 6.33331" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>No PropStar docs found. You\'re all set!</div>';
+        } else {
+          var html = '<p style="padding:4px 0;"><strong>' + results.length + ' PropStar ' + (results.length === 1 ? 'doc' : 'docs') + '</strong> across ' + msg.pageCount + ' ' + (msg.pageCount === 1 ? 'page' : 'pages') + '</p>';
+          html += '<table style="width:100%;border-collapse:collapse;font-size:inherit;">';
+          html += '<tr style="text-align:left;border-bottom:1px solid var(--semantic-border);"><th style="padding:3px 4px;">Name</th><th style="padding:3px 4px;">Page</th><th style="padding:3px 4px;"></th></tr>';
+          for (var i = 0; i < results.length; i++) {
+            var r = results[i];
+            html += '<tr id="migrate-row-' + i + '" style="border-bottom:1px solid var(--semantic-border);">';
+            html += '<td style="padding:3px 4px;">' + r.name + '</td>';
+            html += '<td style="padding:3px 4px;">' + r.page + '</td>';
+            html += '<td style="padding:3px 4px;text-align:right;white-space:nowrap;">';
+            html += '<a href="#" onclick="event.preventDefault();parent.postMessage({pluginMessage:{type:\'navigateToNode\',pageId:\'' + r.pageId + '\',nodeId:\'' + r.id + '\'}},\'*\');" style="color:var(--primary-color);text-decoration:none;">Go to</a>';
+            html += ' <a href="#" id="migrate-btn-' + i + '" onclick="event.preventDefault();this.textContent=\'Migrating…\';this.style.pointerEvents=\'none\';parent.postMessage({pluginMessage:{type:\'migrateNode\',pageId:\'' + r.pageId + '\',nodeId:\'' + r.id + '\',rowIndex:' + i + '}},\'*\');" style="color:var(--primary-color);text-decoration:none;margin-left:8px;">Migrate</a>';
+            html += '</td>';
+            html += '</tr>';
+          }
+          html += '</table>';
+          el.innerHTML = html;
+        }
+        el.style.display = 'block';
+        var scanBtn = document.getElementById('migrateScanBtn');
+        scanBtn.disabled = false;
+        scanBtn.textContent = scanBtn.dataset.originalText || 'Scan file for PropStar docs';
+      }
+
+      if (msg.type === 'migrate-done') {
+        var btn = document.getElementById('migrate-btn-' + msg.rowIndex);
+        if (btn) {
+          btn.textContent = 'Migrated \u2713';
+          btn.style.pointerEvents = 'none';
+          btn.style.color = 'var(--semantic-text-muted)';
+        }
+        // Check if all rows are migrated
+        var allMigrated = true;
+        var scanResults = window._scanResults || [];
+        for (var mi = 0; mi < scanResults.length; mi++) {
+          var mBtn = document.getElementById('migrate-btn-' + mi);
+          if (mBtn && mBtn.textContent.indexOf('\u2713') === -1) { allMigrated = false; break; }
+        }
+        if (allMigrated && scanResults.length > 0) {
+          var el = document.getElementById('migrateScanResults');
+          el.innerHTML = '<div class="migrate-success"><svg viewBox="0 0 16 16" fill="none"><path d="M8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14Z" stroke="currentColor" stroke-miterlimit="10"/><path d="M5.33337 8.33331L7.11117 10.3333L10.6667 6.33331" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>All ' + scanResults.length + ' PropStar ' + (scanResults.length === 1 ? 'doc' : 'docs') + ' migrated!</div>';
+        }
+      }
+
+      if (msg.type === 'migrate-error') {
+        var btn2 = document.getElementById('migrate-btn-' + msg.rowIndex);
+        if (btn2) {
+          btn2.textContent = 'Failed';
+          btn2.style.pointerEvents = '';
+          btn2.style.color = 'var(--semantic-text-danger)';
+        }
+      }
+    };
+  </script>
+  <div id="resizeHandle"></div>
+  <style>
+    #resizeHandle {
+      position: fixed;
+      bottom: 4px;
+      right: 4px;
+      width: 12px;
+      height: 12px;
+      cursor: nwse-resize;
+      z-index: 9999;
+      border-bottom-right-radius: 8px;
+      border-bottom: 1px solid var(--gray-3);
+      border-right: 1px solid var(--gray-3);
+      opacity: 0.5;
+      transition: opacity 0.15s;
+    }
+    #resizeHandle:hover {
+      opacity: 1;
+    }
+  </style>
+  <script>
+    (function() {
+      var handle = document.getElementById('resizeHandle');
+      var startX = 0;
+      var startY = 0;
+      var startW = 0;
+      var startH = 0;
+      var MIN_WIDTH = 240;
+      var MIN_HEIGHT = 400;
+
+      function onMouseMove(e) {
+        var newW = Math.max(MIN_WIDTH, startW + (e.clientX - startX));
+        var newH = Math.max(MIN_HEIGHT, startH + (e.clientY - startY));
+        parent.postMessage({ pluginMessage: { type: 'resize', width: Math.round(newW), height: Math.round(newH) } }, '*');
+      }
+      function onMouseUp() {
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+      }
+      handle.addEventListener('mousedown', function(e) {
+        e.preventDefault();
+        startX = e.clientX;
+        startY = e.clientY;
+        startW = document.documentElement.clientWidth;
+        startH = document.documentElement.clientHeight;
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+      });
+    })();
+  </script>
+</body>
+</html>
