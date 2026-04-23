@@ -1,5 +1,7 @@
 # Obra Autodocs - Figma Plugin
 
+[Install from the Figma Community](https://www.figma.com/community/plugin/1603778616137404487)
+
 Made by [Obra Studio](https://obra.studio/).
 
 A Figma plugin that analyzes a component variant set and documents the different properties.
